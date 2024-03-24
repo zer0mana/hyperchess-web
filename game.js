@@ -1,4 +1,6 @@
 game = new Chess();
+draft = new Draft();
+
 var socket = io();
 
 var color = "white";
@@ -21,11 +23,31 @@ var connect = function(){
     }
 }
 
-var colorBlack = function () {
-    var button = document.getElementById('buttonKnight')
-    button.style.backgroundColor = "black"
+var pickFigure = function (button) {
+    if ((draft.turn() === 'b' && color === 'white')
+    || (draft.turn() === 'w' && color === 'black')) {
+        return
+    }
+    button.style.backgroundColor = color
+    draft.changeTurn()
+    socket.emit('changeColor', { buttonId: button.id, color: color });
+}
 
-    socket.emit('changeColor', 'black');
+var createGame = function () {
+    var code = generateInviteCode(5)
+
+
+}
+
+var generateInviteCode = function(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Допустимые символы для кода
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * charactersLength); // Получаем случайный индекс символа
+        result += characters.charAt(randomIndex); // Добавляем случайный символ в код
+    }
+    return result;
 }
 
 socket.on('full', function (msg) {
@@ -49,9 +71,10 @@ socket.on('move', function (msg) {
     }
 });
 
-socket.on('colorChanged', color => {
-    var button = document.getElementById('buttonKnight')
-    button.style.backgroundColor = "black"
+socket.on('colorChanged', data => {
+    draft.changeTurn()
+    var button = document.getElementById(data.buttonId);
+    button.style.backgroundColor = data.color
 });
 
 var removeGreySquares = function () {
@@ -160,8 +183,21 @@ socket.on('player', (msg) => {
         onMouseoverSquare: onMouseoverSquare,
         onSnapEnd: onSnapEnd
     };
-    board = ChessBoard('board', cfg);
+    // board = ChessBoard('board', cfg);
 });
 // console.log(color)
+function generateInviteCode(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Допустимые символы для кода
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * charactersLength); // Получаем случайный индекс символа
+        result += characters.charAt(randomIndex); // Добавляем случайный символ в код
+    }
+    return result;
+}
+
+const inviteCode = generateInviteCode(5); // Генерируем код длиной 5 символов
+console.log(inviteCode); // Выводим в консоль сгенерированный пригласительный код
 
 var board;

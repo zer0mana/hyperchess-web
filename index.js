@@ -73,9 +73,9 @@ io.on('connection', function (socket) {
 
     });
 
-    socket.on('changeColor', color => {
+    socket.on('changeColor', data => {
         // Передача сообщения о изменении цвета всем остальным клиентам
-        socket.broadcast.emit('colorChanged', color);
+        socket.broadcast.emit('colorChanged', { buttonId: data.buttonId, color: data.color });
     });
 });
 

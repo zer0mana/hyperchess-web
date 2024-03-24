@@ -52,12 +52,19 @@
     .buttonCannon { background-image: url('img/pieces/T_Cannon.png'); }
     .buttonQueen { background-image: url('img/pieces/T_Queen.png'); }
     .buttonDolphin { background-image: url('img/pieces/T_Dolphin.png'); }
-    .buttonFreez { background-image: url('img/pieces/T_Freez.png'); }
+    .buttonFreeze { background-image: url('img/pieces/T_Freez.png'); }
     .buttonKamikaze { background-image: url('img/pieces/T_Kamikaze.png'); }
     .buttonPrince { background-image: url('img/pieces/T_Prince.png'); }
     .buttonRook { background-image: url('img/pieces/T_Rook.png'); }
     .buttonSpades { background-image: url('img/pieces/T_Spades.png'); }
     .buttonSpider { background-image: url('img/pieces/T_Spider.png'); }
+    .createRoom {
+      display: flex;
+      align-items: center;
+    }
+    .createRoom span {
+      margin-right: 10px;
+    }
   </style>
 
 </head>
@@ -72,9 +79,7 @@
   </script> -->
   <div class="container">
         <div id="board" style="width: 500px; margin: auto"></div>
-      
-      <div style="margin: auto"">
-      
+
         <div id="player"></div>
         <div id="roomNumbers">Создать комнату</div>
         <form>
@@ -88,42 +93,44 @@
             </div>
           </div>
         </form>
-
-        <form>
-          <div class="row">
-            <div class="col">
-              <input type="number" id="roomCode" min="0" max="99"
-                     class="form-control form-control-md number">
-            </div>
-            <div class="col">
-              <button id="buttonConnect" class="btn btn-success" onclick="connect()">Connect</button>
-            </div>
-          </div>
-        </form>
       
         <div id="state">Join Game</div>
     </div>
 
+  <div class="menu">
+  </div>
+  <div id="createRoom" class="createRoom">
+    <span>Создать комнату</span>
+    <button>Начать</button>
+  </div>
+
+  <div id="connectRoom" class="connectRoom">
+    <span>Присоединиться по коду</span>
+    <input type="text" placeholder="Код комнаты">
+    <button>Присоединиться</button>
+  </div>
+
   <div id="buttonContainer" class="button-container">
-    <button id="buttonKnight" class="button buttonKnight" onclick="colorBlack(this)"></button>
-    <button class="button buttonAssassin"></button>
-    <button class="button buttonBishop"></button>
-    <button class="button buttonBoomerang"></button>
-    <button class="button buttonCaesar"></button>
-    <button class="button buttonCannon"></button>
-    <button class="button buttonQueen"></button>
-    <button class="button buttonDolphin"></button>
-    <button class="button buttonFreez"></button>
-    <button class="button buttonKamikaze"></button>
-    <button class="button buttonPrince"></button>
-    <button class="button buttonRook"></button>
-    <button class="button buttonSpades"></button>
-    <button class="button buttonSpider"></button>
+    <button id="Kn" class="button buttonKnight" onclick="pickFigure(this)"></button>
+    <button id="An" class="button buttonAssassin" onclick="pickFigure(this)"></button>
+    <button id="Bs" class="button buttonBishop" onclick="pickFigure(this)"></button>
+    <button id="Bm" class="button buttonBoomerang" onclick="pickFigure(this)"></button>
+    <button id="Cs" class="button buttonCaesar" onclick="pickFigure(this)"></button>
+    <button id="Cn" class="button buttonCannon" onclick="pickFigure(this)"></button>
+    <button id="Qn" class="button buttonQueen" onclick="pickFigure(this)"></button>
+    <button id="Dl" class="button buttonDolphin" onclick="pickFigure(this)"></button>
+    <button id="Fr" class="button buttonFreeze" onclick="pickFigure(this)"></button>
+    <button id="Km" class="button buttonKamikaze" onclick="pickFigure(this)"></button>
+    <button id="Pr" class="button buttonPrince" onclick="pickFigure(this)"></button>
+    <button id="Rk" class="button buttonRook" onclick="pickFigure(this)"></button>
+    <button id="Sd" class="button buttonSpades" onclick="pickFigure(this)"></button>
+    <button id="Sp" class="button buttonSpider" onclick="pickFigure(this)"></button>
   </div>
     
   </div>
-  
 
+
+  <script src="./draft.js"></script>
   <script src="./game.js"></script>
 
 </body>
