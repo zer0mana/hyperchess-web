@@ -4,6 +4,7 @@ draft = new Draft();
 var socket = io();
 
 var color = "white";
+var figureColor;
 var players;
 var roomId;
 var play = true;
@@ -11,8 +12,7 @@ var play = true;
 var menu = document.getElementById("menu")
 var room = document.getElementById("roomCode")
 
-var connectRoom = function(){
-    var roomCode = room.value;
+var connectRoom = function(roomCode){
     menu.remove();
     socket.emit('joined', roomCode);
 }
@@ -22,9 +22,9 @@ var pickFigure = function (button) {
     || (draft.turn() === 'w' && color === 'black')) {
         return
     }
-    button.style.backgroundColor = color
+    button.style.backgroundColor = figureColor
     draft.changeTurn()
-    socket.emit('changeColor', { buttonId: button.id, color: color, roomId: 0 });
+    socket.emit('changeColor', { buttonId: button.id, color: figureColor, roomId: 0 });
 }
 
 var createRoom = function () {
@@ -45,7 +45,6 @@ socket.on('play', function (msg) {
 });
 
 socket.on('finishDraft', function () {
-    alert("finish draft")
     var draftContainer = document.getElementById("draft")
     draftContainer.remove()
 
@@ -154,11 +153,17 @@ var onSnapEnd = function () {
 
 
 socket.on('player', (msg) => {
-    var plno = document.getElementById('player')
+    var plno = document.getElementById('info')
     var draftButtons = document.getElementById('draft')
     draftButtons.style.display = "grid";
 
     color = msg.color;
+    if (color === "white") {
+        figureColor = "red"
+    }
+    else {
+        figureColor = "blue"
+    }
 
     plno.innerHTML = 'Player ' + msg.players + " : " + color + " InviteCode: " + msg.roomCode;
     players = msg.players;
