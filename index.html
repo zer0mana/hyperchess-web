@@ -105,15 +105,21 @@
     .small {
       font-size: 14px; /* Размер уменьшенного текста */
     }
+    .gameMenu {
+      align-items: center;
+      display: flex;
+    }
     #board {
       width: 650px;
-      margin: auto;
       height: 100vh; /* Задаем высоту элемента во всю высоту окна браузера */
       display: flex; /* Используем флексбокс для центрирования по вертикали */
       justify-content: center; /* Центрируем содержимое по горизонтали */
       align-items: center; /* Центрируем содержимое по вертикали */
+      margin-left: auto; /* Для выравнивания вправо */
+      margin-right: 20px; /* Расстояние между board и otherObject */
     }
-    .scrollable-panel {
+    #panel {
+      margin-left: auto;
       width: 300px;
       height: 200px; /* Фиксированная высота плашки */
       overflow-y: auto; /* Включаем вертикальную прокрутку */
@@ -129,16 +135,19 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
-  <div class="container">
+  <div class="gameMenu">
+        <div id="addToPanel" class="createRoom">
+          <button id="addToPanelButton" class="menuButton" onclick="addToPanel('yellow')">Создать комнату</button>
+        </div>
         <div id="info"></div>
         <div id="code">Тут будет код</div>
         <div id="board"></div>
+        <div id="panel" class="scrollable-panel"></div>
   </div>
 
   <div id="menu" class="menu">
-    <div class="scrollable-panel" id="panel"></div>
     <div id="createRoom" class="createRoom">
-      <button id="createRoomButton" class="menuButton" onclick="addToPanel('yellow')">Создать комнату</button>
+      <button id="createRoomButton" class="menuButton" onclick="createRoom('yellow')">Создать комнату</button>
     </div>
     <div id="connectRoom" class="connectRoom">
       <button id="connectRoomButton" class="menuButton" onclick="getCode()"><span class="bold">Присоединиться к комнате</span><br><span class="small">По пригласительному коду</span></button>
@@ -158,16 +167,20 @@
   <script>
     // Получаем элемент панели
     var panel = document.getElementById('panel');
+    var i = 0;
 
     // Функция для добавления текста в панель
     function addToPanel(colorClass) {
-      var span = document.createElement('span');
-      span.textContent = "1. e4      e5";
-      span.className = colorClass;
-      // Добавляем элемент в плашку
-      panel.appendChild(span);
-      // Создаем элемент br для переноса строки
-      panel.appendChild(document.createElement('br'));
+      var rectangle = document.createElement('div');
+      rectangle.textContent = "1. e4      e5";
+      if (i++ % 2 === 0) {
+        rectangle.style.backgroundColor = "black";
+      }
+      else {
+        rectangle.style.backgroundColor = "grey";
+      }
+      // Добавляем прямоугольник в плашку
+      panel.appendChild(rectangle);
       // Прокручиваем плашку до конца
       panel.scrollTop = panel.scrollHeight;
     }

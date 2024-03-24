@@ -33,6 +33,7 @@ io.on('connection', function (socket) {
     socket.on('createRoom',  function () {
         color = "white"
         var code = generateInviteCode(5);
+        console.log(code)
 
         games[lastGameId].players = 1;
         games[lastGameId].code = code
