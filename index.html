@@ -18,10 +18,10 @@
   <script src="./chessboard/js/chessboard-0.3.0.min.js"></script>
   <link rel="stylesheet" href="./chessboard/css/chessboard-0.3.0.min.css">
   <style>
-    .number::-webkit-inner-spin-button, 
-    .number::-webkit-outer-spin-button { 
-    -webkit-appearance: none; 
-    margin: 0; 
+    .number::-webkit-inner-spin-button,
+    .number::-webkit-outer-spin-button {
+    -webkit-appearance: none;
+    margin: 0;
     }
     #roomNumbers{
       margin: 7px;
@@ -93,21 +93,18 @@
             </div>
           </div>
         </form>
-      
+
         <div id="state">Join Game</div>
     </div>
 
-  <div class="menu">
-  </div>
-  <div id="createRoom" class="createRoom">
-    <span>Создать комнату</span>
-    <button>Начать</button>
-  </div>
-
-  <div id="connectRoom" class="connectRoom">
-    <span>Присоединиться по коду</span>
-    <input type="text" placeholder="Код комнаты">
-    <button>Присоединиться</button>
+  <div id="menu" class="menu">
+    <div id="createRoom" class="createRoom">
+      <button id="createRoomButton" class="createRoom" onclick="createRoom()">Создать команту</button>
+    </div>
+    <div id="connectRoom" class="connectRoom">
+      <input id="roomCode" type="text" placeholder="Код комнаты">
+      <button id="connectRoomButton" class="createRoom" onclick="connectRoom()">Присоединиться к комнате</button>
+    </div>
   </div>
 
   <div id="buttonContainer" class="button-container">

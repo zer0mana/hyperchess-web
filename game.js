@@ -8,19 +8,16 @@ var players;
 var roomId;
 var play = true;
 
-var room = document.getElementById("room")
+var menu = document.getElementById("menu")
+var room = document.getElementById("roomCode")
 var roomNumber = document.getElementById("roomNumbers")
 var button = document.getElementById("button")
 var state = document.getElementById('state')
 
-var connect = function(){
-    roomId = room.value;
-    if (roomId !== "" && parseInt(roomId) <= 100) {
-        room.remove();
-        roomNumber.innerHTML = "Room Number " + roomId;
-        button.remove();
-        socket.emit('joined', roomId);
-    }
+var connectRoom = function(){
+    var roomCode = room.value;
+    menu.remove();
+    socket.emit('joined', roomCode);
 }
 
 var pickFigure = function (button) {
@@ -33,21 +30,9 @@ var pickFigure = function (button) {
     socket.emit('changeColor', { buttonId: button.id, color: color });
 }
 
-var createGame = function () {
-    var code = generateInviteCode(5)
-
-
-}
-
-var generateInviteCode = function(length) {
-    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Допустимые символы для кода
-    let result = '';
-    const charactersLength = characters.length;
-    for (let i = 0; i < length; i++) {
-        const randomIndex = Math.floor(Math.random() * charactersLength); // Получаем случайный индекс символа
-        result += characters.charAt(randomIndex); // Добавляем случайный символ в код
-    }
-    return result;
+var createRoom = function () {
+    menu.remove();
+    socket.emit('createRoom')
 }
 
 socket.on('full', function (msg) {
@@ -161,7 +146,7 @@ socket.on('player', (msg) => {
 
     color = msg.color;
 
-    plno.innerHTML = 'Player ' + msg.players + " : " + color;
+    plno.innerHTML = 'Player ' + msg.players + " : " + color + " InviteCode: " + msg.code;
     players = msg.players;
 
     if(players == 2){

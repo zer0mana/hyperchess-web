@@ -14,7 +14,7 @@ app.use(express.static(__dirname + "/"));
 
 var games = Array(100);
 for (let i = 0; i < 100; i++) {
-    games[i] = {players: 0 , pid: [0 , 0]};
+    games[i] = {players: 0 , pid: [0 , 0], code: ""};
 }
 
 
@@ -30,28 +30,44 @@ io.on('connection', function (socket) {
 
     console.log(playerId + ' connected');
 
-    socket.on('joined', function (roomId) {
-        // games[roomId] = {}
-        if (games[roomId].players < 2) {
-            games[roomId].players++;
-            games[roomId].pid[games[roomId].players - 1] = playerId;
-        }
-        else{
-            socket.emit('full', roomId)
+    socket.on('createRoom',  function () {
+        var code = generateInviteCode(5);
+
+        games[lastGameId].players = 1;
+        games[lastGameId].code = code
+        games[lastGameId].pid[games[lastGameId].players - 1] = playerId;
+
+        socket.emit('player', { playerId, players, color, lastGameId, code })
+        lastGameId++;
+    });
+
+    socket.on('joined', function (roomCode) {
+        var gameIndex = games.findIndex(game => game.code === roomCode);
+
+        if (gameIndex !== -1) {
+            if (games[gameIndex].players < 2) {
+                games[gameIndex].players++;
+                games[gameIndex].pid[games[gameIndex].players - 1] = playerId;
+            }
+            else{
+                socket.emit('full', gameIndex)
+                return;
+            }
+        } else {
+            alert("Некорректный код приглашения")
+            socket.emit('full', gameIndex)
             return;
         }
         
-        console.log(games[roomId]);
-        players = games[roomId].players
+        console.log(games[gameIndex]);
+        players = games[gameIndex].players
         
 
         if (players % 2 == 0) color = 'black';
         else color = 'white';
 
-        socket.emit('player', { playerId, players, color, roomId })
+        socket.emit('player', { playerId, players, color, gameIndex })
         // players--;
-
-        
     });
 
     socket.on('move', function (msg) {
@@ -78,6 +94,18 @@ io.on('connection', function (socket) {
         socket.broadcast.emit('colorChanged', { buttonId: data.buttonId, color: data.color });
     });
 });
+
+var lastGameId = 0
+var generateInviteCode = function(length) {
+    const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Допустимые символы для кода
+    let result = '';
+    const charactersLength = characters.length;
+    for (let i = 0; i < length; i++) {
+        const randomIndex = Math.floor(Math.random() * charactersLength); // Получаем случайный индекс символа
+        result += characters.charAt(randomIndex); // Добавляем случайный символ в код
+    }
+    return result;
+}
 
 server.listen(port);
 console.log('Connected');
