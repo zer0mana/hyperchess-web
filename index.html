@@ -29,7 +29,7 @@
     body{
       margin: 4%
     }
-    .button-container {
+    .draft {
       display: none;
       grid-template-columns: repeat(7, 1fr);
       gap: 1px;
@@ -79,22 +79,7 @@
   </script> -->
   <div class="container">
         <div id="board" style="width: 500px; margin: auto"></div>
-
         <div id="player"></div>
-        <div id="roomNumbers">Создать комнату</div>
-        <form>
-          <div class="row">
-            <div class="col">
-              <input type="number" id="room" min="0" max="99"
-              class="form-control form-control-md number">
-            </div>
-            <div class="col">
-              <button id="button" class="btn btn-success" onclick="connect()">Connect</button>
-            </div>
-          </div>
-        </form>
-
-        <div id="state">Join Game</div>
     </div>
 
   <div id="menu" class="menu">
@@ -107,7 +92,7 @@
     </div>
   </div>
 
-  <div id="buttonContainer" class="button-container">
+  <div id="draft" class="draft">
     <button id="Kn" class="button buttonKnight" onclick="pickFigure(this)"></button>
     <button id="An" class="button buttonAssassin" onclick="pickFigure(this)"></button>
     <button id="Bs" class="button buttonBishop" onclick="pickFigure(this)"></button>

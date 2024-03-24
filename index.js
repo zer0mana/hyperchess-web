@@ -14,7 +14,7 @@ app.use(express.static(__dirname + "/"));
 
 var games = Array(100);
 for (let i = 0; i < 100; i++) {
-    games[i] = {players: 0 , pid: [0 , 0], code: ""};
+    games[i] = {players: 0 , pid: [0 , 0], code: "", figuresCount: 0};
 }
 
 
@@ -92,8 +92,16 @@ io.on('connection', function (socket) {
     });
 
     socket.on('changeColor', data => {
+        console.log(data)
         // Передача сообщения о изменении цвета всем остальным клиентам
+        games[data.roomId].figuresCount++
+        console.log(games[data.roomId].figuresCount)
         socket.broadcast.emit('colorChanged', { buttonId: data.buttonId, color: data.color });
+
+        if (games[data.roomId].figuresCount === 4) {
+            socket.emit('finishDraft')
+            socket.broadcast.emit('finishDraft')
+        }
     });
 });
 

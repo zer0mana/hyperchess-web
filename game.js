@@ -10,9 +10,6 @@ var play = true;
 
 var menu = document.getElementById("menu")
 var room = document.getElementById("roomCode")
-var roomNumber = document.getElementById("roomNumbers")
-var button = document.getElementById("button")
-var state = document.getElementById('state')
 
 var connectRoom = function(){
     var roomCode = room.value;
@@ -27,7 +24,7 @@ var pickFigure = function (button) {
     }
     button.style.backgroundColor = color
     draft.changeTurn()
-    socket.emit('changeColor', { buttonId: button.id, color: color });
+    socket.emit('changeColor', { buttonId: button.id, color: color, roomId: 0 });
 }
 
 var createRoom = function () {
@@ -43,9 +40,27 @@ socket.on('full', function (msg) {
 socket.on('play', function (msg) {
     if (msg == roomId) {
         play = false;
-        state.innerHTML = "Game in progress"
     }
     // console.log(msg)
+});
+
+socket.on('finishDraft', function () {
+    alert("finish draft")
+    var draftContainer = document.getElementById("draft")
+    draftContainer.remove()
+
+    var cfg = {
+        orientation: color,
+        draggable: true,
+        position: 'start',
+        onDragStart: onDragStart,
+        onDrop: onDrop,
+        onMouseoutSquare: onMouseoutSquare,
+        onMouseoverSquare: onMouseoverSquare,
+        onSnapEnd: onSnapEnd
+    };
+
+    board = ChessBoard('board', cfg);
 });
 
 socket.on('move', function (msg) {
@@ -100,7 +115,6 @@ var onDrop = function (source, target) {
         promotion: 'q' // NOTE: always promote to a queen for example simplicity
     });
     if (game.game_over()) {
-        state.innerHTML = 'GAME OVER';
         socket.emit('gameOver', roomId)
     }
 
@@ -141,36 +155,20 @@ var onSnapEnd = function () {
 
 socket.on('player', (msg) => {
     var plno = document.getElementById('player')
-    var draftButtons = document.getElementById('buttonContainer')
+    var draftButtons = document.getElementById('draft')
     draftButtons.style.display = "grid";
 
     color = msg.color;
 
     plno.innerHTML = 'Player ' + msg.players + " : " + color + " InviteCode: " + msg.roomCode;
     players = msg.players;
-
+    roomId = msg.roomId
     if(players == 2){
         play = false;
         socket.emit('play', msg.roomId);
-        state.innerHTML = "Game in Progress"
     }
-    else
-        state.innerHTML = "Waiting for Second player";
-
-
-    var cfg = {
-        orientation: color,
-        draggable: true,
-        position: 'start',
-        onDragStart: onDragStart,
-        onDrop: onDrop,
-        onMouseoutSquare: onMouseoutSquare,
-        onMouseoverSquare: onMouseoverSquare,
-        onSnapEnd: onSnapEnd
-    };
-    // board = ChessBoard('board', cfg);
 });
-// console.log(color)
+
 function generateInviteCode(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Допустимые символы для кода
     let result = '';
