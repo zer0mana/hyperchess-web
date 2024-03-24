@@ -21,6 +21,13 @@ var connect = function(){
     }
 }
 
+var colorBlack = function () {
+    var button = document.getElementById('buttonKnight')
+    button.style.backgroundColor = "black"
+
+    socket.emit('changeColor', 'black');
+}
+
 socket.on('full', function (msg) {
     if(roomId == msg)
         window.location.assign(window.location.href+ 'full.html');
@@ -40,6 +47,11 @@ socket.on('move', function (msg) {
         board.position(game.fen());
         console.log("moved")
     }
+});
+
+socket.on('colorChanged', color => {
+    var button = document.getElementById('buttonKnight')
+    button.style.backgroundColor = "black"
 });
 
 var removeGreySquares = function () {
@@ -121,6 +133,9 @@ var onSnapEnd = function () {
 
 socket.on('player', (msg) => {
     var plno = document.getElementById('player')
+    var draftButtons = document.getElementById('buttonContainer')
+    draftButtons.style.display = "grid";
+
     color = msg.color;
 
     plno.innerHTML = 'Player ' + msg.players + " : " + color;

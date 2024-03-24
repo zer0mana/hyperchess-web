@@ -56,7 +56,7 @@ io.on('connection', function (socket) {
 
     socket.on('move', function (msg) {
         socket.broadcast.emit('move', msg);
-        // console.log(msg);
+        console.log(msg);
     });
 
     socket.on('play', function (msg) {
@@ -71,9 +71,12 @@ io.on('connection', function (socket) {
         }
         console.log(playerId + ' disconnected');
 
-    }); 
+    });
 
-    
+    socket.on('changeColor', color => {
+        // Передача сообщения о изменении цвета всем остальным клиентам
+        socket.broadcast.emit('colorChanged', color);
+    });
 });
 
 server.listen(port);

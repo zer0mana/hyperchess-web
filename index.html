@@ -29,6 +29,35 @@
     body{
       margin: 4%
     }
+    .button-container {
+      display: none;
+      grid-template-columns: repeat(7, 1fr);
+      gap: 1px;
+    }
+    .button {
+      width: 100px; /* Фиксированная ширина кнопки */
+      height: 100px; /* Фиксированная высота кнопки */
+      padding: 0; /* Убираем отступы внутри кнопки */
+      text-align: center;
+      background-color: lightblue;
+      border: none;
+      cursor: pointer;
+      background-size: cover; /* Растягиваем изображение на всю кнопку */
+    }
+    .buttonKnight { background-image: url('img/pieces/T_Knight.png'); }
+    .buttonAssassin { background-image: url('img/pieces/T_Assasin.png'); }
+    .buttonBishop { background-image: url('img/pieces/T_Bishop.png'); }
+    .buttonBoomerang { background-image: url('img/pieces/T_Boomerang.png'); }
+    .buttonCaesar { background-image: url('img/pieces/T_Caesar.png'); }
+    .buttonCannon { background-image: url('img/pieces/T_Cannon.png'); }
+    .buttonQueen { background-image: url('img/pieces/T_Queen.png'); }
+    .buttonDolphin { background-image: url('img/pieces/T_Dolphin.png'); }
+    .buttonFreez { background-image: url('img/pieces/T_Freez.png'); }
+    .buttonKamikaze { background-image: url('img/pieces/T_Kamikaze.png'); }
+    .buttonPrince { background-image: url('img/pieces/T_Prince.png'); }
+    .buttonRook { background-image: url('img/pieces/T_Rook.png'); }
+    .buttonSpades { background-image: url('img/pieces/T_Spades.png'); }
+    .buttonSpider { background-image: url('img/pieces/T_Spider.png'); }
   </style>
 
 </head>
@@ -47,11 +76,11 @@
       <div style="margin: auto"">
       
         <div id="player"></div>
-        <div id="roomNumbers">Enter a room number between 0 and 99</div>
+        <div id="roomNumbers">Создать комнату</div>
         <form>
           <div class="row">
             <div class="col">
-              <input type="number" id="room" min="0" max="99" 
+              <input type="number" id="room" min="0" max="99"
               class="form-control form-control-md number">
             </div>
             <div class="col">
@@ -59,9 +88,38 @@
             </div>
           </div>
         </form>
+
+        <form>
+          <div class="row">
+            <div class="col">
+              <input type="number" id="roomCode" min="0" max="99"
+                     class="form-control form-control-md number">
+            </div>
+            <div class="col">
+              <button id="buttonConnect" class="btn btn-success" onclick="connect()">Connect</button>
+            </div>
+          </div>
+        </form>
       
         <div id="state">Join Game</div>
     </div>
+
+  <div id="buttonContainer" class="button-container">
+    <button id="buttonKnight" class="button buttonKnight" onclick="colorBlack(this)"></button>
+    <button class="button buttonAssassin"></button>
+    <button class="button buttonBishop"></button>
+    <button class="button buttonBoomerang"></button>
+    <button class="button buttonCaesar"></button>
+    <button class="button buttonCannon"></button>
+    <button class="button buttonQueen"></button>
+    <button class="button buttonDolphin"></button>
+    <button class="button buttonFreez"></button>
+    <button class="button buttonKamikaze"></button>
+    <button class="button buttonPrince"></button>
+    <button class="button buttonRook"></button>
+    <button class="button buttonSpades"></button>
+    <button class="button buttonSpider"></button>
+  </div>
     
   </div>
   
