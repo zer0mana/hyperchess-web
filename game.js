@@ -146,7 +146,7 @@ socket.on('player', (msg) => {
 
     color = msg.color;
 
-    plno.innerHTML = 'Player ' + msg.players + " : " + color + " InviteCode: " + msg.code;
+    plno.innerHTML = 'Player ' + msg.players + " : " + color + " InviteCode: " + msg.roomCode;
     players = msg.players;
 
     if(players == 2){

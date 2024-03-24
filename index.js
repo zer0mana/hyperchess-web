@@ -31,13 +31,15 @@ io.on('connection', function (socket) {
     console.log(playerId + ' connected');
 
     socket.on('createRoom',  function () {
+        color = "white"
         var code = generateInviteCode(5);
 
         games[lastGameId].players = 1;
         games[lastGameId].code = code
         games[lastGameId].pid[games[lastGameId].players - 1] = playerId;
+        var players = 1
 
-        socket.emit('player', { playerId, players, color, lastGameId, code })
+        socket.emit('player', { playerId, players, color, lastGameId, roomCode: code })
         lastGameId++;
     });
 
@@ -54,7 +56,6 @@ io.on('connection', function (socket) {
                 return;
             }
         } else {
-            alert("Некорректный код приглашения")
             socket.emit('full', gameIndex)
             return;
         }
@@ -66,7 +67,8 @@ io.on('connection', function (socket) {
         if (players % 2 == 0) color = 'black';
         else color = 'white';
 
-        socket.emit('player', { playerId, players, color, gameIndex })
+        console.log(roomCode)
+        socket.emit('player', { playerId, players, color, gameIndex, roomCode: roomCode })
         // players--;
     });
 
