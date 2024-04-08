@@ -13,8 +13,7 @@
   <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
   integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
     crossorigin="anonymous"></script>
-    
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/chess.js/0.10.2/chess.js"></script>
+
   <script src="./chessboard/js/chessboard-0.3.0.min.js"></script>
   <link rel="stylesheet" href="./chessboard/css/chessboard-0.3.0.min.css">
   <style>
@@ -174,7 +173,7 @@
       var rectangle = document.createElement('div');
       rectangle.textContent = "1. e4      e5";
       if (i++ % 2 === 0) {
-        rectangle.style.backgroundColor = "black";
+        rectangle.style.backgroundColor = "SaddleBrown";
       }
       else {
         rectangle.style.backgroundColor = "grey";
@@ -207,6 +206,7 @@
 
 
   <script src="./draft.js"></script>
+  <script src="./chess.js"></script>
   <script src="./game.js"></script>
 
 </body>
