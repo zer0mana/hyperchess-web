@@ -305,43 +305,10 @@ var Chess = function(fen) {
         return piece;
     }
 
-    function build_move(board, from, to, flags, promotion) {
-        var move = {
-            color: turn,
-            from: from,
-            to: to,
-            flags: flags,
-            piece: board[from].type
-        };
-
-        if (promotion) {
-            move.flags |= BITS.PROMOTION;
-            move.promotion = promotion;
-        }
-
-        if (board[to]) {
-            move.captured = board[to].type;
-        } else if (flags & BITS.EP_CAPTURE) {
-            move.captured = PAWN;
-        }
-        return move;
-    }
-
     function generate_moves(options) {
-        function add_move(board, moves, from, to, flags) {
-            /* if pawn promotion */
-            if (board[from].type === PAWN &&
-                (rank(to) === RANK_8 || rank(to) === RANK_1)) {
-                var pieces = [QUEEN, ROOK, BISHOP, KNIGHT];
-                for (var i = 0, len = pieces.length; i < len; i++) {
-                    moves.push(build_move(board, from, to, flags, pieces[i]));
-                }
-            } else {
-                moves.push(build_move(board, from, to, flags));
-            }
-        }
 
         var moves = [];
+        return move_generator.generate_moves(board, turn)
 
         var us = turn;
         var them = swap_color(us);
