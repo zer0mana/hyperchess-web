@@ -1,7 +1,7 @@
 var Chess = function(fen) {
 
     /* jshint indent: false */
-
+    var move_generator = new MoveGenerator()
     var BLACK = 'b';
     var WHITE = 'w';
 
@@ -128,9 +128,6 @@ var Chess = function(fen) {
     var history = [];
     var header = {};
 
-    /* if the user passes in a fen string, load it, else default to
-     * starting position
-     */
     if (typeof fen === 'undefined') {
         load(DEFAULT_POSITION);
     } else {
@@ -243,16 +240,6 @@ var Chess = function(fen) {
         var epflags = (ep_square === EMPTY) ? '-' : algebraic(ep_square);
 
         return [fen, turn].join(' ');
-    }
-
-    function set_header(args) {
-        for (var i = 0; i < args.length; i += 2) {
-            if (typeof args[i] === 'string' &&
-                typeof args[i + 1] === 'string') {
-                header[args[i]] = args[i + 1];
-            }
-        }
-        return header;
     }
 
     function update_setup(fen) {
@@ -392,12 +379,12 @@ var Chess = function(fen) {
                 /* single square, non-capturing */
                 var square = i + PAWN_OFFSETS[us][0];
                 if (board[square] == null) {
-                    add_move(board, moves, i, square, BITS.NORMAL);
+                    move_generator.add_move(board, turn, moves, i, square, BITS.NORMAL);
 
                     /* double square */
                     var square = i + PAWN_OFFSETS[us][1];
                     if (second_rank[us] === rank(i) && board[square] == null) {
-                        add_move(board, moves, i, square, BITS.BIG_PAWN);
+                        move_generator.add_move(board, turn, moves, i, square, BITS.BIG_PAWN);
                     }
                 }
 
@@ -408,9 +395,9 @@ var Chess = function(fen) {
 
                     if (board[square] != null &&
                         board[square].color === them) {
-                        add_move(board, moves, i, square, BITS.CAPTURE);
+                        move_generator.add_move(board, turn, moves, i, square, BITS.CAPTURE);
                     } else if (square === ep_square) {
-                        add_move(board, moves, i, ep_square, BITS.EP_CAPTURE);
+                        move_generator.add_move(board, turn, moves, i, ep_square, BITS.EP_CAPTURE);
                     }
                 }
             } else {
@@ -423,10 +410,10 @@ var Chess = function(fen) {
                         if (square & 0x88) break;
 
                         if (board[square] == null) {
-                            add_move(board, moves, i, square, BITS.NORMAL);
+                            move_generator.add_move(board, turn, moves, i, square, BITS.NORMAL);
                         } else {
                             if (board[square].color === us) break;
-                            add_move(board, moves, i, square, BITS.CAPTURE);
+                            move_generator.add_move(board, turn, moves, i, square, BITS.CAPTURE);
                             break;
                         }
 
@@ -451,7 +438,7 @@ var Chess = function(fen) {
                     !attacked(them, kings[us]) &&
                     !attacked(them, castling_from + 1) &&
                     !attacked(them, castling_to)) {
-                    add_move(board, moves, kings[us] , castling_to,
+                    move_generator.add_move(board, turn, moves, kings[us] , castling_to,
                         BITS.KSIDE_CASTLE);
                 }
             }
@@ -467,7 +454,7 @@ var Chess = function(fen) {
                     !attacked(them, kings[us]) &&
                     !attacked(them, castling_from - 1) &&
                     !attacked(them, castling_to)) {
-                    add_move(board, moves, kings[us], castling_to,
+                    move_generator.add_move(board, turn, moves, kings[us], castling_to,
                         BITS.QSIDE_CASTLE);
                 }
             }
