@@ -64,6 +64,7 @@ socket.on('finishDraft', function () {
 socket.on('move', function (msg) {
     if (msg.room == roomId) {
         game.move(msg.move);
+        addToPanel(msg.move.piece.toUpperCase() + msg.move.to)
         board.position(game.fen());
         console.log("moved")
     }
@@ -118,8 +119,10 @@ var onDrop = function (source, target) {
 
     // illegal move
     if (move === null) return 'snapback';
-    else
+    else {
+        addToPanel(move.piece.toUpperCase() + move.to)
         socket.emit('move', { move: move, board: game.fen(), room: roomId });
+    }
 
 };
 

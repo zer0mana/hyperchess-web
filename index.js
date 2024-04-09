@@ -89,7 +89,6 @@ io.on('connection', function (socket) {
                 games[i].players--;
         }
         console.log(playerId + ' disconnected');
-
     });
 
     socket.on('changeColor', data => {
