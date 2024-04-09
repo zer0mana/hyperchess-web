@@ -1,5 +1,6 @@
 // Класс генерирует возможные ходы
 class MoveGenerator {
+    _piece = new Piece();
     EMPTY = -1;
     ep_square = this.EMPTY;
 
@@ -43,16 +44,41 @@ class MoveGenerator {
         QSIDE_CASTLE: 64
     };
 
+    // Возвращает все возможные ходы
     generate_moves(board, turn) {
         var moves = []
 
-        for (var i = this.SQUARES.a8; i <= this.SQUARES.h1; i++) {
-            var piece = board[i];
-            if (piece == null) {
-                continue;
+        for (var from = this.SQUARES.a8; from <= this.SQUARES.h1; from++) {
+            var piece = board[from]
+            if (piece === null || piece === undefined) {
+                continue
             }
 
-            this.add_move(board, turn, moves, i, 67, this.BITS.NORMAL);
+            var piece_moves = this._piece.get_moves(from, piece.type, board, from)
+
+            for (var to = 0; to < piece_moves.length; to++) {
+                this.add_move(board, turn, moves, from, piece_moves[to], this.BITS.NORMAL);
+            }
+        }
+
+        return moves;
+    }
+
+    // Возвращает возможные ходы для фигуры на поле
+    generate_single_move(board, square, turn) {
+        var moves = []
+
+        var from = this.SQUARES[square]
+        var piece = board[from]
+        if (piece === null || piece === undefined) {
+            return moves
+        }
+
+        var piece_moves = this._piece.get_moves(from, piece.type, board, from)
+
+        console.log(1, piece.type, piece_moves)
+        for (var to = 0; to < piece_moves.length; to++) {
+            this.add_move(board, turn, moves, from, piece_moves[to], this.BITS.NORMAL);
         }
 
         return moves;
@@ -62,15 +88,8 @@ class MoveGenerator {
         if (board[from] === null) {
             return
         }
-        if (board[from].type === this.PAWN &&
-            (this.rank(to) === this.RANK_8 || this.rank(to) === this.RANK_1)) {
-            var pieces = [this.QUEEN, this.ROOK, this.BISHOP, this.KNIGHT];
-            for (var i = 0, len = pieces.length; i < len; i++) {
-                moves.push(this.build_move(board, turn, from, to, flags, pieces[i]));
-            }
-        } else {
-            moves.push(this.build_move(board, turn, from, to, flags));
-        }
+
+        moves.push(this.build_move(board, turn, from, to, flags));
     }
 
     build_move(board, turn, from, to, flags, promotion) {
@@ -94,9 +113,5 @@ class MoveGenerator {
         }
 
         return move;
-    }
-
-    rank(i) {
-        return i >> 4;
     }
 }

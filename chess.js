@@ -91,15 +91,6 @@ var Chess = function(fen) {
         QSIDE_CASTLE: 64
     };
 
-    var RANK_1 = 7;
-    var RANK_2 = 6;
-    var RANK_3 = 5;
-    var RANK_4 = 4;
-    var RANK_5 = 3;
-    var RANK_6 = 2;
-    var RANK_7 = 1;
-    var RANK_8 = 0;
-
     var SQUARES = {
         a8:   0, b8:   1, c8:   2, d8:   3, e8:   4, f8:   5, g8:   6, h8:   7,
         a7:  16, b7:  17, c7:  18, d7:  19, e7:  20, f7:  21, g7:  22, h7:  23,
@@ -109,13 +100,6 @@ var Chess = function(fen) {
         a3:  80, b3:  81, c3:  82, d3:  83, e3:  84, f3:  85, g3:  86, h3:  87,
         a2:  96, b2:  97, c2:  98, d2:  99, e2: 100, f2: 101, g2: 102, h2: 103,
         a1: 112, b1: 113, c1: 114, d1: 115, e1: 116, f1: 117, g1: 118, h1: 119
-    };
-
-    var ROOKS = {
-        w: [{square: SQUARES.a1, flag: BITS.QSIDE_CASTLE},
-            {square: SQUARES.h1, flag: BITS.KSIDE_CASTLE}],
-        b: [{square: SQUARES.a8, flag: BITS.QSIDE_CASTLE},
-            {square: SQUARES.h8, flag: BITS.KSIDE_CASTLE}]
     };
 
     var board = new Array(128);
@@ -306,145 +290,11 @@ var Chess = function(fen) {
     }
 
     function generate_moves(options) {
-
-        var moves = [];
-        return move_generator.generate_moves(board, turn)
-
-        var us = turn;
-        var them = swap_color(us);
-        var second_rank = {b: RANK_7, w: RANK_2};
-
-        var first_sq = SQUARES.a8;
-        var last_sq = SQUARES.h1;
-        var single_square = false;
-
-        /* do we want legal moves? */
-        var legal = (typeof options !== 'undefined' && 'legal' in options) ?
-            options.legal : true;
-
-        /* are we generating moves for a single square? */
-        if (typeof options !== 'undefined' && 'square' in options) {
-            if (options.square in SQUARES) {
-                first_sq = last_sq = SQUARES[options.square];
-                single_square = true;
-            } else {
-                /* invalid square */
-                return [];
-            }
+        if (options === undefined) {
+            return move_generator.generate_moves(board, turn)
         }
 
-        for (var i = first_sq; i <= last_sq; i++) {
-            /* did we run off the end of the board */
-            if (i & 0x88) { i += 7; continue; }
-
-            var piece = board[i];
-            if (piece == null || piece.color !== us) {
-                continue;
-            }
-
-            if (piece.type === PAWN) {
-                /* single square, non-capturing */
-                var square = i + PAWN_OFFSETS[us][0];
-                if (board[square] == null) {
-                    move_generator.add_move(board, turn, moves, i, square, BITS.NORMAL);
-
-                    /* double square */
-                    var square = i + PAWN_OFFSETS[us][1];
-                    if (second_rank[us] === rank(i) && board[square] == null) {
-                        move_generator.add_move(board, turn, moves, i, square, BITS.BIG_PAWN);
-                    }
-                }
-
-                /* pawn captures */
-                for (j = 2; j < 4; j++) {
-                    var square = i + PAWN_OFFSETS[us][j];
-                    if (square & 0x88) continue;
-
-                    if (board[square] != null &&
-                        board[square].color === them) {
-                        move_generator.add_move(board, turn, moves, i, square, BITS.CAPTURE);
-                    } else if (square === ep_square) {
-                        move_generator.add_move(board, turn, moves, i, ep_square, BITS.EP_CAPTURE);
-                    }
-                }
-            } else {
-                for (var j = 0, len = PIECE_OFFSETS[piece.type].length; j < len; j++) {
-                    var offset = PIECE_OFFSETS[piece.type][j];
-                    var square = i;
-
-                    while (true) {
-                        square += offset;
-                        if (square & 0x88) break;
-
-                        if (board[square] == null) {
-                            move_generator.add_move(board, turn, moves, i, square, BITS.NORMAL);
-                        } else {
-                            if (board[square].color === us) break;
-                            move_generator.add_move(board, turn, moves, i, square, BITS.CAPTURE);
-                            break;
-                        }
-
-                        /* break, if knight or king */
-                        if (piece.type === 'n' || piece.type === 'k') break;
-                    }
-                }
-            }
-        }
-
-        /* check for castling if: a) we're generating all moves, or b) we're doing
-         * single square move generation on the king's square
-         */
-        if ((!single_square) || last_sq === kings[us]) {
-            /* king-side castling */
-            if (castling[us] & BITS.KSIDE_CASTLE) {
-                var castling_from = kings[us];
-                var castling_to = castling_from + 2;
-
-                if (board[castling_from + 1] == null &&
-                    board[castling_to]       == null &&
-                    !attacked(them, kings[us]) &&
-                    !attacked(them, castling_from + 1) &&
-                    !attacked(them, castling_to)) {
-                    move_generator.add_move(board, turn, moves, kings[us] , castling_to,
-                        BITS.KSIDE_CASTLE);
-                }
-            }
-
-            /* queen-side castling */
-            if (castling[us] & BITS.QSIDE_CASTLE) {
-                var castling_from = kings[us];
-                var castling_to = castling_from - 2;
-
-                if (board[castling_from - 1] == null &&
-                    board[castling_from - 2] == null &&
-                    board[castling_from - 3] == null &&
-                    !attacked(them, kings[us]) &&
-                    !attacked(them, castling_from - 1) &&
-                    !attacked(them, castling_to)) {
-                    move_generator.add_move(board, turn, moves, kings[us], castling_to,
-                        BITS.QSIDE_CASTLE);
-                }
-            }
-        }
-
-        /* return all pseudo-legal moves (this includes moves that allow the king
-         * to be captured)
-         */
-        if (!legal) {
-            return moves;
-        }
-
-        /* filter out illegal moves */
-        var legal_moves = [];
-        for (var i = 0, len = moves.length; i < len; i++) {
-            make_move(moves[i]);
-            if (!king_attacked(us)) {
-                legal_moves.push(moves[i]);
-            }
-            undo_move();
-        }
-
-        return legal_moves;
+        return move_generator.generate_single_move(board, options.square, turn)
     }
 
     /* convert a move from 0x88 coordinates to Standard Algebraic Notation
@@ -803,12 +653,7 @@ var Chess = function(fen) {
             var moves = [];
 
             for (var i = 0, len = ugly_moves.length; i < len; i++) {
-                if (typeof options !== 'undefined' && 'verbose' in options &&
-                    options.verbose) {
-                    moves.push(make_pretty(ugly_moves[i]));
-                } else {
-                    moves.push(move_to_san(ugly_moves[i], false));
-                }
+                moves.push(make_pretty(ugly_moves[i]));
             }
 
             return moves;
@@ -853,7 +698,7 @@ var Chess = function(fen) {
             var move_obj = null;
 
             if (typeof move === 'object') {
-                var moves = generate_moves();
+                var moves= generate_moves();
 
                 for (var i = 0, len = moves.length; i < len; i++) {
                     if (move.from === algebraic(moves[i].from) &&
