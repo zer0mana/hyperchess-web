@@ -10,7 +10,6 @@ var roomId;
 var play = true;
 
 var menu = document.getElementById("menu")
-var room = document.getElementById("roomCode")
 
 var connectRoom = function(roomCode){
     menu.remove();
@@ -151,7 +150,6 @@ var onSnapEnd = function () {
     board.position(game.fen());
 };
 
-
 socket.on('player', (msg) => {
     var plno = document.getElementById('info')
     var draftButtons = document.getElementById('draft')
@@ -174,6 +172,7 @@ socket.on('player', (msg) => {
     }
 });
 
+// Сгенерировать пригласительный код
 function generateInviteCode(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Допустимые символы для кода
     let result = '';

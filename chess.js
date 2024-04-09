@@ -131,10 +131,6 @@ var Chess = function(fen) {
         update_setup(generate_fen());
     }
 
-    function reset() {
-        load(DEFAULT_POSITION);
-    }
-
     function load(fen) {
         var tokens = fen.split(/\s+/);
         var position = tokens[0];
@@ -335,16 +331,6 @@ var Chess = function(fen) {
                 output += '=' + move.promotion.toUpperCase();
             }
         }
-
-        make_move(move);
-        if (in_check()) {
-            if (in_checkmate()) {
-                output += '#';
-            } else {
-                output += '+';
-            }
-        }
-        undo_move();
 
         return output;
     }

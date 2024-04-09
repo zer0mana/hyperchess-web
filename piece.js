@@ -21,19 +21,19 @@ class Piece {
     }
 
     get_queen_moves(from, board, turn) {
-        return this.get_moves_by_rays(from, board, turn, [7, 7, 7, 7, 0, 7, 7, 7, 7])
+        return this.get_moves_by_rays(from, board, turn, [7, 7, 7, 7, 0, 7, 7, 7, 7], false)
     }
 
     get_knight_moves(from, board, turn) {
-        return this.get_moves_by_rays(from, board, turn, [7, 7, 7, 7, 0, 7, 7, 7, 7])
+        return this.get_moves_by_rays(from, board, turn, [7, 7, 7, 7, 0, 7, 7, 7, 7], false)
     }
 
     get_bishop_moves(from, board, turn) {
-        return this.get_moves_by_rays(from, board, turn, [7, 0, 7, 0, 0, 0, 7, 0, 7])
+        return this.get_moves_by_rays(from, board, turn, [7, 0, 7, 0, 0, 0, 7, 0, 7], false)
     }
 
     get_rook_moves(from, board, turn) {
-        return this.get_moves_by_rays(from, board, turn, [0, 7, 0, 7, 0, 7, 0, 7, 0])
+        return this.get_moves_by_rays(from, board, turn, [0, 7, 0, 7, 0, 7, 0, 7, 0], false)
     }
 
     get_boomerang_moves(from, board, turn) {
@@ -92,7 +92,7 @@ class Piece {
     // Так например для ферзя он будет [7, 7, 7, 7, 0, 7, 7, 7, 7]
     // Для ладьи [0, 7, 0, 7, 0, 7, 0, 7, 0]
     // А для слона [7, 0, 7, 0, 0, 0, 7, 0, 7]
-    get_moves_by_rays(from, board, turn, rays) {
+    get_moves_by_rays(from, board, turn, rays, go_true) {
         var moves = []
         var i = 0
 
@@ -108,16 +108,32 @@ class Piece {
                 while (distance-- > 0) {
                     to += (x + y)
                     if (!this.validate_cell(to)) {
-                        break;
+                        break
                     }
 
-                    var another_piece = board[to];
-                    if (another_piece === null || another_piece === undefined) {
+                    var cell = board[to];
+
+                    // Пустая клетка
+                    if (cell === null || cell === undefined) {
                         moves.push(to)
                         continue
                     }
 
-                    break
+                    // Своя фигура
+                    if (cell.color === turn) {
+                        // Способность проходить сквозь фигуры
+                        if (go_true) {
+                            continue
+                        }
+                        break
+                    }
+
+                    // Чужая фигура
+                    if (cell.color !== turn) {
+                        moves.push(to)
+                        break
+                    }
+                    break;
                 }
             }
         }
