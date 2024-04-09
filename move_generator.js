@@ -74,9 +74,10 @@ class MoveGenerator {
             return moves
         }
 
+        console.log(1, piece.type)
         var piece_moves = this._piece.get_moves(from, piece.type, board, from)
+        console.log(2, piece_moves)
 
-        console.log(1, piece.type, piece_moves)
         for (var to = 0; to < piece_moves.length; to++) {
             this.add_move(board, turn, moves, from, piece_moves[to], this.BITS.NORMAL);
         }
