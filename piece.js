@@ -36,6 +36,54 @@ class Piece {
         return this.get_moves_by_rays(from, board, turn, [0, 7, 0, 7, 0, 7, 0, 7, 0])
     }
 
+    get_boomerang_moves(from, board, turn) {
+        return []
+    }
+
+    get_ninja_moves(from, board, turn) {
+        return []
+    }
+
+    get_spidy_moves(from, board, turn) {
+        return []
+    }
+
+    get_admiral_moves(from, board, turn) {
+        return []
+    }
+
+    get_dolphin_moves(from, board, turn) {
+        return []
+    }
+
+    get_cannon_moves(from, board, turn) {
+        return []
+    }
+
+    get_assassin_moves(from, board, turn) {
+        return []
+    }
+
+    get_freeze_moves(from, board, turn) {
+        return []
+    }
+
+    get_spades_moves(from, board, turn) {
+        return []
+    }
+
+    get_caesar_moves(from, board, turn) {
+        return []
+    }
+
+    get_prince_moves(from, board, turn) {
+        return []
+    }
+
+    get_hypno_moves(from, board, turn) {
+        return []
+    }
+
     get_default_moves(from, board, turn) {
         return [65,67,66]
     }
