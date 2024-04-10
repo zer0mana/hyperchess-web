@@ -13,25 +13,22 @@ var Chess = function(fen) {
     var ROOK = 'r';
     var QUEEN = 'q';
     var KING = 'k';
+    var ASSASSIN = 'a';
+    var FREEZE = 'f';
+    var SPADES = 's'
+    var BOOMERANG = 'g'
+    var NINJA = 'j';
+    var SPIDER = 'd'
+    var ADMIRAL = 'm';
+    var DOLPHIN = 'l';
+    var CANNON = 'c';
+    var PRINCE = 'i'
+    var CAESAR = 'e'
+    var HYPNO = 'h'
 
-    var SYMBOLS = 'pnbrqkPNBRQK';
+    var SYMBOLS = 'pnbrqkafsgjdmlcePNBRQKAFSGJDMLCE';
 
-    var DEFAULT_POSITION = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
-
-    var POSSIBLE_RESULTS = ['1-0', '0-1', '1/2-1/2', '*'];
-
-    var PAWN_OFFSETS = {
-        b: [16, 32, 17, 15],
-        w: [-16, -32, -17, -15]
-    };
-
-    var PIECE_OFFSETS = {
-        n: [-18, -33, -31, -14,  18, 33, 31,  14],
-        b: [-17, -15,  17,  15],
-        r: [-16,   1,  16,  -1],
-        q: [-17, -16, -15,   1,  17, 16, 15,  -1],
-        k: [-17, -16, -15,   1,  17, 16, 15,  -1]
-    };
+    var DEFAULT_POSITION = 'raejkbsr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
     var ATTACKS = [
         20, 0, 0, 0, 0, 0, 0, 24,  0, 0, 0, 0, 0, 0,20, 0,
@@ -146,6 +143,7 @@ var Chess = function(fen) {
             } else if (is_digit(piece)) {
                 square += parseInt(piece, 10);
             } else {
+                console.log(piece)
                 var color = (piece < 'a') ? WHITE : BLACK;
                 put({type: piece.toLowerCase(), color: color}, algebraic(square));
                 square++;
@@ -219,6 +217,7 @@ var Chess = function(fen) {
         cflags = cflags || '-';
         var epflags = (ep_square === EMPTY) ? '-' : algebraic(ep_square);
 
+        console.log(-1, fen)
         return [fen, turn].join(' ');
     }
 

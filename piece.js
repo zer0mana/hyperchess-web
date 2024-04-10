@@ -4,6 +4,16 @@ class Piece {
     BISHOP = 'b';
     ROOK = 'r';
     QUEEN = 'q';
+    KING = 'k';
+    ASSASSIN = 'a';
+    FREEZE = 'f';
+    SPADES = 's'
+    BOOMERANG = 'g'
+    NINJA = 'j';
+    SPIDER = 'd'
+    ADMIRAL = 'm';
+    DOLPHIN = 'l';
+    CANNON = 'c';
 
     get_moves(from, type, board, turn) {
         switch (type) {

@@ -26,6 +26,8 @@ var pickFigure = function (button) {
     socket.emit('changeColor', { buttonId: button.id, color: figureColor, roomId: 0 });
 }
 
+
+// Подключение к комнате
 var createRoom = function () {
     menu.remove();
     socket.emit('createRoom')
@@ -43,6 +45,8 @@ socket.on('play', function (msg) {
     // console.log(msg)
 });
 
+
+// Драфт
 socket.on('finishDraft', function () {
     var draftContainer = document.getElementById("draft")
     draftContainer.remove()
@@ -58,7 +62,7 @@ socket.on('finishDraft', function () {
         onSnapEnd: onSnapEnd
     };
 
-    board = ChessBoard('board', cfg);
+    board = ChessBoard('board', cfg, 'aaaqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR');
 });
 
 socket.on('move', function (msg) {

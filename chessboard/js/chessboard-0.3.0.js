@@ -35,7 +35,7 @@ function validSquare(square) {
 
 function validPieceCode(code) {
   if (typeof code !== 'string') return false;
-  return (code.search(/^[bw][KQRNBP]$/) !== -1);
+  return (code.search(/^[bw][KQRNBPAFSGJDMLCE]$/) !== -1);
 }
 
 // TODO: this whole function could probably be replaced with a single regex
@@ -54,7 +54,7 @@ function validFen(fen) {
   for (var i = 0; i < 8; i++) {
     if (chunks[i] === '' ||
         chunks[i].length > 8 ||
-        chunks[i].search(/[^kqrbnpKQRNBP1-8]/) !== -1) {
+        chunks[i].search(/[^kqrbnpafsgjdmlceKQRNBPAFSGJDMLCE1-8]/) !== -1) {
       return false;
     }
   }
@@ -185,7 +185,7 @@ function objToFen(obj) {
   return fen;
 }
 
-window['ChessBoard'] = window['ChessBoard'] || function(containerElOrId, cfg) {
+window['ChessBoard'] = window['ChessBoard'] || function(containerElOrId, cfg, start_fen) {
 'use strict';
 
 cfg = cfg || {};
@@ -195,7 +195,7 @@ cfg = cfg || {};
 //------------------------------------------------------------------------------
 
 var MINIMUM_JQUERY_VERSION = '1.7.0',
-  START_FEN = 'rnbqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR',
+  START_FEN = start_fen,
   START_POSITION = fenToObj(START_FEN);
 
 // use unique class names to prevent clashing with anything else on the page
@@ -442,7 +442,7 @@ function expandConfig() {
   if (cfg.hasOwnProperty('pieceTheme') !== true ||
       (typeof cfg.pieceTheme !== 'string' &&
        typeof cfg.pieceTheme !== 'function')) {
-    cfg.pieceTheme = 'img/chesspieces/wikipedia/{piece}.png';
+    cfg.pieceTheme = 'img/pieces/{piece}.png';
   }
 
   // animation speeds
@@ -672,7 +672,7 @@ function buildPiece(piece, hidden, id) {
 function buildSparePieces(color) {
   var pieces = ['wK', 'wQ', 'wR', 'wB', 'wN', 'wP'];
   if (color === 'black') {
-    pieces = ['bK', 'bQ', 'bR', 'bB', 'bN', 'bP'];
+    pieces = ['bK', 'bQ', 'bR', 'bB', 'bA', 'bP'];
   }
 
   var html = '';
@@ -1401,28 +1401,34 @@ widget.position = function(position, useAnimation) {
   if (typeof position === 'string' && position.toLowerCase() === 'fen') {
     return objToFen(CURRENT_POSITION);
   }
+  console.log('not here')
 
   // default for useAnimations is true
   if (useAnimation !== false) {
     useAnimation = true;
   }
 
+  console.log(0, position)
   // start position
   if (typeof position === 'string' && position.toLowerCase() === 'start') {
     position = deepCopy(START_POSITION);
   }
 
+  console.log(1, position)
   // convert FEN to position object
   if (validFen(position) === true) {
+    console.log('validated')
     position = fenToObj(position);
   }
 
   // validate position object
   if (validPositionObject(position) !== true) {
+    console.log('something wrong')
     error(6482, 'Invalid value passed to the position method.', position);
     return;
   }
 
+  console.log(2, position)
   if (useAnimation === true) {
     // start the animations
     doAnimations(calculateAnimations(CURRENT_POSITION, position),
