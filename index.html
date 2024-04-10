@@ -132,6 +132,7 @@
   <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
   <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
 
+  // Игра
   <div class="gameMenu">
         <div id="info"></div>
         <div id="code">Тут будет код</div>
@@ -139,6 +140,7 @@
         <div id="panel" class="scrollable-panel"></div>
   </div>
 
+  // Меню
   <div id="menu" class="menu">
     <div id="createRoom" class="createRoom">
       <button id="createRoomButton" class="menuButton" onclick="createRoom('yellow')">Создать комнату</button>
@@ -146,17 +148,16 @@
     <div id="connectRoom" class="connectRoom">
       <button id="connectRoomButton" class="menuButton" onclick="getCode()"><span class="bold">Присоединиться к комнате</span><br><span class="small">По пригласительному коду</span></button>
     </div>
-  </div>
-
-  <title>CodePrompt</title>
-  <script>
-    function getCode() {
-      var userInput = prompt('Введите пригласительный код:');
-      if (userInput !== null) {
-        connectRoom(userInput);
+    <title>CodePrompt</title>
+    <script>
+      function getCode() {
+        var userInput = prompt('Введите пригласительный код:');
+        if (userInput !== null) {
+          connectRoom(userInput);
+        }
       }
-    }
-  </script>
+    </script>
+  </div>
 
   <script>
     // Получаем элемент панели
@@ -179,6 +180,7 @@
     }
   </script>
 
+  // Драфт
   <div id="draft" class="draft">
     <button id="n" class="button buttonKnight" onclick="pickFigure(this)"></button>
     <button id="a" class="button buttonAssassin" onclick="pickFigure(this)"></button>
