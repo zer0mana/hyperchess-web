@@ -1,82 +1,68 @@
-<!doctype html>
+<!DOCTYPE html>
 <html lang="en">
-
 <head>
-  <meta charset="UTF-8" />
-  <title>Chess 0</title>
-  <link rel="stylesheet" 
-  href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css" 
-  integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
-    crossorigin="anonymous">
-  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js" 
-  integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
-    crossorigin="anonymous"></script>
+  <meta charset="UTF-8">
+  <meta name="viewport" content="width=device-width, initial-scale=1.0">
+  <title>Четыре фигуры</title>
 
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="./chessboard/js/chessboard-0.3.0.js"></script>
+  <script src="./piece.js"></script>
+  <script src="./move_generator.js"></script>
+  <script src="./draft.js"></script>
+  <script src="./chess.js"></script>
+  <script src="./game.js"></script>
+
   <link rel="stylesheet" href="./chessboard/css/chessboard-0.3.0.css">
   <style>
-    /* Общие стили для кнопок */
-    .menuButton {
-      padding: 15px 30px;
-      border: none;
-      border-radius: 10px; /* Закругляем края */
-      cursor: pointer;
-      font-size: 22px;
-      box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2); /* Тень */
-      display: block; /* Превращаем кнопки в блочные элементы */
-      margin: 0 auto; /* Центрируем по горизонтали */
-      margin-bottom: 20px; /* Отступ снизу между кнопками */
-      width: 400px; /* Фиксированная ширина кнопки */
-      height: 120px; /* Фиксированная высота кнопки */
-    }
-
-    /* Стили для первой кнопки */
-    #createRoomButton {
-      background-color: darkred;
-      color: white;
-    }
-
-    /* Стили для второй кнопки */
-    #connectRoomButton {
-      background-color: darkred;
-      color: white;
-    }
-
-    /* Стили для контейнера меню */
-    .menu {
-      text-align: center; /* Центрируем содержимое */
-      position: absolute; /* Позиционируем абсолютно */
-      top: 50%; /* Размещаем верхний край контейнера по центру */
-      left: 50%; /* Размещаем левый край контейнера по центру */
-      transform: translate(-50%, -50%); /* Центрируем контейнер по центру */
-    }
-
-    body{
-      background-color: dimgrey;
-      margin: 0; /* Убираем отступы */
-      padding: 0; /* Убираем отступы */
+    body {
+      background-color: #cccccc;
     }
     .draft {
-      text-align: center; /* Центрируем содержимое */
-      position: absolute; /* Позиционируем абсолютно */
-      top: 50%; /* Размещаем верхний край контейнера по центру */
-      left: 50%; /* Размещаем левый край контейнера по центру */
-      transform: translate(-50%, -50%); /* Центрируем контейнер по центру */
+      justify-content: center;
+      align-items: center;
+      height: 100vh;
+      width: 160vh;
+      background-color: gray;
+      margin: auto;
       display: none;
+      flex-direction: column;
+    }
+    .draft_panel {
+      text-align: center;
+      position: absolute;
+      top: 50%;
+      left: 50%;
+      width: 800px;
+      height: 220px;
+      transform: translate(-50%, -50%);
       grid-template-columns: repeat(7, 1fr);
       gap: 1px;
+      background-color: whitesmoke;
+      padding: 10px;
+      border-radius: 20px;
+    }
+    .invite_code {
+      width: 800px;
+      height: 100px;
+      background-color: red;
+      padding: 10px;
+      border-radius: 20px;
+      display: flex;
     }
     .button {
       margin-bottom: 10px;
       margin-left: 10px;
-      width: 100px; /* Фиксированная ширина кнопки */
-      height: 100px; /* Фиксированная высота кнопки */
-      padding: 0; /* Убираем отступы внутри кнопки */
+      width: 100px;
+      height: 100px;
+      padding: 0;
       text-align: center;
       background-color: lightblue;
       border: none;
       cursor: pointer;
-      background-size: cover; /* Растягиваем изображение на всю кнопку */
+      background-size: cover;
+      border-radius: 20px;
     }
     .buttonKnight { background-image: url('img/pieces/T_Knight.png'); }
     .buttonAssassin { background-image: url('img/pieces/T_Assasin.png'); }
@@ -92,19 +78,70 @@
     .buttonRook { background-image: url('img/pieces/T_Rook.png'); }
     .buttonSpades { background-image: url('img/pieces/T_Spades.png'); }
     .buttonSpider { background-image: url('img/pieces/T_Spider.png'); }
-    .createRoom {
-      display: flex;
+    .game {
+      justify-content: center;
       align-items: center;
-    }
-    .createRoom span {
-      margin-right: 10px;
-    }
-    .small {
-      font-size: 14px; /* Размер уменьшенного текста */
-    }
-    .gameMenu {
-      align-items: center;
+      height: 100vh;
+      width: 160vh;
+      background-color: gray;
+      margin: auto;
       display: flex;
+    }
+    .rectangle {
+      display: flex;
+      width: 300px;
+      height: 700px;
+      background-color: whitesmoke;
+      margin: 10px;
+      border-radius: 20px;
+      padding: 10px;
+      flex-direction: column;
+    }
+    .square {
+      display: flex;
+      width: 700px;
+      height: 700px;
+      background-color: whitesmoke;
+      margin: 10px;
+      border-radius: 20px;
+      padding: 10px;
+      flex-direction: column;
+    }
+    .piece_image {
+      width: 270px;
+      height: 270px;
+      background-color: red;
+      border-radius: 20px;
+      margin-bottom: 1px;
+    }
+    .piece_name {
+      width: 270px;
+      height: 60px;
+      background-color: red;
+      margin-bottom: 1px;
+    }
+    .piece_info {
+      width: 270px;
+      height: 280px;
+      background-color: red;
+      margin-bottom: 1px;
+    }
+    .btn {
+      width: 270px;
+      height: 50px;
+      margin-bottom: 10px;
+    }
+    .left {
+      margin-right: auto;
+      align-self: center;
+    }
+    .right {
+      margin-left: auto;
+      align-self: center;
+    }
+    .center {
+      margin: auto;
+      align-self: center;
     }
     #board {
       width: 650px;
@@ -115,73 +152,36 @@
       margin-left: auto; /* Для выравнивания вправо */
       margin-right: 20px; /* Расстояние между board и otherObject */
     }
-    #panel {
-      margin-left: auto;
-      width: 300px;
-      height: 200px; /* Фиксированная высота плашки */
-      overflow-y: auto; /* Включаем вертикальную прокрутку */
-      border: 1px solid #ccc; /* Добавляем границу для контейнера */
-      padding: 10px; /* Добавляем внутренний отступ */
+    #history_panel {
+      width: 270px;
+      height: 500px;
+      border: 1px dashed red; /* Пунктирная красная обводка толщиной 1 пиксель */
     }
   </style>
-
 </head>
-
 <body>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
-
-  // Игра
-  <div class="gameMenu">
-        <div id="info"></div>
-        <div id="code">Тут будет код</div>
-        <div id="board"></div>
-        <div id="panel" class="scrollable-panel"></div>
+<div class="game">
+  <div class="rectangle left">
+    <div class="piece_image center"></div>
+    <div class="piece_name center"></div>
+    <div class="piece_info center"></div>
   </div>
-
-  // Меню
-  <div id="menu" class="menu">
-    <div id="createRoom" class="createRoom">
-      <button id="createRoomButton" class="menuButton" onclick="createRoom('yellow')">Создать комнату</button>
-    </div>
-    <div id="connectRoom" class="connectRoom">
-      <button id="connectRoomButton" class="menuButton" onclick="getCode()"><span class="bold">Присоединиться к комнате</span><br><span class="small">По пригласительному коду</span></button>
-    </div>
-    <title>CodePrompt</title>
+  <div class="square">
+    <div id="board"></div>
     <script>
-      function getCode() {
-        var userInput = prompt('Введите пригласительный код:');
-        if (userInput !== null) {
-          connectRoom(userInput);
-        }
-      }
+      boardScript()
     </script>
   </div>
+  <div class="rectangle right">
+    <div id="history_panel" class="scrollable-panel center"></div>
+    <button class="btn center">Предолжить ничью</button>
+    <button class="btn center">Сдаться</button>
+  </div>
+</div>
 
-  <script>
-    // Получаем элемент панели
-    var panel = document.getElementById('panel');
-    var i = 0;
-
-    // Функция для добавления текста в панель
-    function addToPanel(text) {
-      if (i++ % 2 === 0) {
-        var rectangle = document.createElement('div');
-        rectangle.textContent = text;
-        rectangle.style.backgroundColor = "SaddleBrown";
-        panel.appendChild(rectangle);
-        panel.scrollTop = panel.scrollHeight;
-        // rectangle.style.backgroundColor = "grey";
-      }
-      else {
-        panel.lastChild.textContent = panel.lastChild.textContent + "        " + text
-      }
-    }
-  </script>
-
-  // Драфт
-  <div id="draft" class="draft">
+<div id="draft" class="draft">
+  <div id="draft_panel" class="draft_panel center">
     <button id="n" class="button buttonKnight" onclick="pickFigure(this)"></button>
     <button id="a" class="button buttonAssassin" onclick="pickFigure(this)"></button>
     <button id="b" class="button buttonBishop" onclick="pickFigure(this)"></button>
@@ -197,15 +197,8 @@
     <button id="s" class="button buttonSpades" onclick="pickFigure(this)"></button>
     <button id="d" class="button buttonSpider" onclick="pickFigure(this)"></button>
   </div>
-    
-  </div>
-
-  <script src="./piece.js"></script>
-  <script src="./move_generator.js"></script>
-  <script src="./draft.js"></script>
-  <script src="./chess.js"></script>
-  <script src="./game.js"></script>
+  <div class="invite_code center"></div>
+</div>
 
 </body>
-
 </html>

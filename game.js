@@ -66,6 +66,21 @@ socket.on('finishDraft', function (msg) {
     game = new Chess(msg.startPosition)
 });
 
+var boardScript = function () {
+    var cfg = {
+        orientation: color,
+        draggable: true,
+        position: 'start',
+        onDragStart: onDragStart,
+        onDrop: onDrop,
+        onMouseoutSquare: onMouseoutSquare,
+        onMouseoverSquare: onMouseoverSquare,
+        onSnapEnd: onSnapEnd
+    };
+
+    board = ChessBoard('board', cfg);
+}
+
 socket.on('move', function (msg) {
     if (msg.room == roomId) {
         game.move(msg.move);
