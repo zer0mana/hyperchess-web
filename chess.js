@@ -26,7 +26,7 @@ var Chess = function(fen) {
     var CAESAR = 'e'
     var HYPNO = 'h'
 
-    var SYMBOLS = 'pnbrqkafsgjdmlcePNBRQKAFSGJDMLCE';
+    var SYMBOLS = 'pnbrqkafsgjdmlceiPNBRQKAFSGJDMLCEI';
 
     var DEFAULT_POSITION = 'raejkbsr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 
@@ -143,7 +143,6 @@ var Chess = function(fen) {
             } else if (is_digit(piece)) {
                 square += parseInt(piece, 10);
             } else {
-                console.log(piece)
                 var color = (piece < 'a') ? WHITE : BLACK;
                 put({type: piece.toLowerCase(), color: color}, algebraic(square));
                 square++;
@@ -217,7 +216,6 @@ var Chess = function(fen) {
         cflags = cflags || '-';
         var epflags = (ep_square === EMPTY) ? '-' : algebraic(ep_square);
 
-        console.log(-1, fen)
         return [fen, turn].join(' ');
     }
 

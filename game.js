@@ -23,7 +23,7 @@ var pickFigure = function (button) {
     }
     button.style.backgroundColor = figureColor
     draft.changeTurn()
-    socket.emit('changeColor', { buttonId: button.id, color: figureColor, roomId: 0 });
+    socket.emit('changeColor', { buttonId: button.id, turn: color, color: figureColor, roomId: 0 });
 }
 
 
@@ -47,7 +47,7 @@ socket.on('play', function (msg) {
 
 
 // Драфт
-socket.on('finishDraft', function () {
+socket.on('finishDraft', function (msg) {
     var draftContainer = document.getElementById("draft")
     draftContainer.remove()
 
@@ -62,7 +62,8 @@ socket.on('finishDraft', function () {
         onSnapEnd: onSnapEnd
     };
 
-    board = ChessBoard('board', cfg, 'aaaqkbnr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR');
+    board = ChessBoard('board', cfg, msg.startPosition);
+    game = new Chess(msg.startPosition)
 });
 
 socket.on('move', function (msg) {

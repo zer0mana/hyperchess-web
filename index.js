@@ -14,9 +14,8 @@ app.use(express.static(__dirname + "/"));
 
 var games = Array(100);
 for (let i = 0; i < 100; i++) {
-    games[i] = {players: 0 , pid: [0 , 0], code: "", figuresCount: 0};
+    games[i] = {players: 0 , pid: [0 , 0], code: "", figuresCount: 0, whiteFigures: [], blackFigures: []};
 }
-
 
 app.get('/', (req, res) => {
     res.sendFile(__dirname + '/index.html');
@@ -26,7 +25,6 @@ io.on('connection', function (socket) {
     // console.log(players);
     var color;
     var playerId =  Math.floor((Math.random() * 100) + 1)
-    
 
     console.log(playerId + ' connected');
 
@@ -98,14 +96,37 @@ io.on('connection', function (socket) {
         console.log(games[data.roomId].figuresCount)
         socket.broadcast.emit('colorChanged', { buttonId: data.buttonId, color: data.color });
 
+        if (data.turn === 'white') {
+            games[data.roomId].whiteFigures.push(data.buttonId.toUpperCase())
+        } else {
+            games[data.roomId].blackFigures.push(data.buttonId.toLowerCase())
+        }
+
         if (games[data.roomId].figuresCount === 4) {
-            socket.emit('finishDraft')
-            socket.broadcast.emit('finishDraft')
+            games[data.roomId].whiteFigures.push('A')
+            games[data.roomId].whiteFigures.push('A')
+            games[data.roomId].whiteFigures.push('A')
+            games[data.roomId].whiteFigures.push('A')
+            games[data.roomId].whiteFigures.push('A')
+            games[data.roomId].whiteFigures.push('K')
+
+            games[data.roomId].blackFigures.push('a')
+            games[data.roomId].blackFigures.push('a')
+            games[data.roomId].blackFigures.push('a')
+            games[data.roomId].blackFigures.push('a')
+            games[data.roomId].blackFigures.push('a')
+            games[data.roomId].blackFigures.push('k')
+
+            console.log(getStartPosition(data.roomId))
+            socket.emit('finishDraft', { startPosition: getStartPosition(data.roomId) })
+            socket.broadcast.emit('finishDraft', { startPosition: getStartPosition(data.roomId) })
         }
     });
 });
 
 var lastGameId = 0
+
+// Генерирует
 var generateInviteCode = function(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Допустимые символы для кода
     let result = '';
@@ -116,6 +137,25 @@ var generateInviteCode = function(length) {
     }
     return result;
 }
+
+// Генерирует стартовую позицию по набору фигур
+var getStartPosition = function(roomId) {
+    var position = ""
+    for (var i in games[roomId].blackFigures) {
+        position += games[roomId].blackFigures[i]
+    }
+    var blackPawns = "/pppppppp"
+    var space = "/8/8/8/8"
+    var whitePawns = "/PPPPPPPP/"
+
+    position += blackPawns + space + whitePawns
+
+    for (var i in games[roomId].whiteFigures) {
+        position += games[roomId].whiteFigures[i]
+    }
+    return position + " w KQkq - 0 1"
+}
+
 
 server.listen(port);
 console.log('Connected');
