@@ -14,6 +14,9 @@ class Piece {
     ADMIRAL = 'm';
     DOLPHIN = 'l';
     CANNON = 'c';
+    PRINCE = 'i'
+    CAESAR = 'e'
+    HYPNO = 'h'
 
     get_moves(from, type, board, turn) {
         switch (type) {
@@ -25,6 +28,18 @@ class Piece {
                 return this.get_bishop_moves(from, board, turn)
             case this.ROOK:
                 return this.get_rook_moves(from, board, turn)
+            case this.DOLPHIN:
+                return this.get_dolphin_moves(from, board, turn)
+            case this.CANNON:
+                return this.get_cannon_moves(from, board, turn)
+            case this.NINJA:
+                return this.get_ninja_moves(from, board, turn)
+            case this.SPIDER:
+                return this.get_spidy_moves(from, board, turn)
+            case this.ASSASSIN:
+                return this.get_assassin_moves(from, board, turn)
+            case this.PRINCE:
+                return this.get_prince_moves(from, board, turn)
             default:
                 return this.get_default_moves(from, board, turn)
         }
@@ -51,11 +66,11 @@ class Piece {
     }
 
     get_ninja_moves(from, board, turn) {
-        return []
+        return this.get_moves_by_rays(from, board, turn, [0, 7, 7, 0, 0, 7, 0, 7, 7], false)
     }
 
     get_spidy_moves(from, board, turn) {
-        return []
+        return this.get_moves_by_rays(from, board, turn, [1, 1, 1, 1, 0, 1, 1, 1, 1], false)
     }
 
     get_admiral_moves(from, board, turn) {
@@ -63,15 +78,15 @@ class Piece {
     }
 
     get_dolphin_moves(from, board, turn) {
-        return []
+        return this.get_moves_by_rays(from, board, turn, [0, 3, 0, 3, 0, 3, 0, 3, 0], true)
     }
 
     get_cannon_moves(from, board, turn) {
-        return []
+        return this.get_moves_by_rays(from, board, turn, [7, 1, 0, 0, 0, 7, 7, 1, 0], false)
     }
 
     get_assassin_moves(from, board, turn) {
-        return []
+        return this.get_moves_by_rays(from, board, turn, [2, 2, 2, 2, 0, 2, 2, 2, 2], false)
     }
 
     get_freeze_moves(from, board, turn) {
@@ -87,7 +102,7 @@ class Piece {
     }
 
     get_prince_moves(from, board, turn) {
-        return []
+        return this.get_moves_by_rays(from, board, turn, [2, 2, 2, 2, 0, 2, 2, 2, 2], false)
     }
 
     get_hypno_moves(from, board, turn) {
