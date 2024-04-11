@@ -4,15 +4,15 @@
   <meta charset="UTF-8">
   <meta name="viewport" content="width=device-width, initial-scale=1.0">
   <title>Четыре фигуры</title>
+  <link rel="stylesheet"
+        href="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/css/bootstrap.min.css"
+        integrity="sha384-MCw98/SFnGE8fJT3GXwEOngsV7Zt27NXFoaoApmYm81iuXoPkFOJwJ8ERdknLPMO"
+        crossorigin="anonymous">
+  <script src="https://stackpath.bootstrapcdn.com/bootstrap/4.1.3/js/bootstrap.min.js"
+          integrity="sha384-ChfqqxuZUCnJSK3+MXmPNIyE6ZbWh2IMqE241rYiqJxyMiZ6OW/JmZQ5stwEULTy"
+          crossorigin="anonymous"></script>
 
-  <script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
-  <script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
   <script src="./chessboard/js/chessboard-0.3.0.js"></script>
-  <script src="./piece.js"></script>
-  <script src="./move_generator.js"></script>
-  <script src="./draft.js"></script>
-  <script src="./chess.js"></script>
-  <script src="./game.js"></script>
 
   <link rel="stylesheet" href="./chessboard/css/chessboard-0.3.0.css">
   <style>
@@ -24,7 +24,7 @@
       align-items: center;
       height: 80vh;
       width: 160vh;
-      display: flex;
+      display: none;
       margin: 10px;
       border-radius: 20px;
       padding: 10px;
@@ -127,6 +127,7 @@
       flex-direction: column;
     }
     .piece_image {
+      background-size: cover;
       width: 270px;
       height: 270px;
       background-color: red;
@@ -162,6 +163,37 @@
       margin: auto;
       align-self: center;
     }
+    .menuButton {
+      padding: 15px 30px;
+      border: none;
+      border-radius: 10px; /* Закругляем края */
+      cursor: pointer;
+      font-size: 22px;
+      box-shadow: 10px 10px 10px rgba(0, 0, 0, 0.2); /* Тень */
+      display: block; /* Превращаем кнопки в блочные элементы */
+      margin: 0 auto; /* Центрируем по горизонтали */
+      margin-bottom: 20px; /* Отступ снизу между кнопками */
+      width: 400px; /* Фиксированная ширина кнопки */
+      height: 120px; /* Фиксированная высота кнопки */
+    }
+    #createRoomButton {
+      background-color: darkred;
+      color: white;
+    }
+    #connectRoomButton {
+      background-color: darkred;
+      color: white;
+    }
+    .small {
+      font-size: 14px; /* Размер уменьшенного текста */
+    }
+    .menu {
+      text-align: center; /* Центрируем содержимое */
+      position: absolute; /* Позиционируем абсолютно */
+      top: 50%; /* Размещаем верхний край контейнера по центру */
+      left: 50%; /* Размещаем левый край контейнера по центру */
+      transform: translate(-50%, -50%); /* Центрируем контейнер по центру */
+    }
     #board {
       width: 650px;
       height: 100vh; /* Задаем высоту элемента во всю высоту окна браузера */
@@ -180,17 +212,35 @@
 </head>
 <body>
 
-<div class="game">
+<script src="https://cdnjs.cloudflare.com/ajax/libs/socket.io/2.1.1/socket.io.js"></script>
+<script src="https://ajax.googleapis.com/ajax/libs/jquery/3.3.1/jquery.min.js"></script>
+
+<div id="menu" class="menu">
+  <div id="createRoom" class="createRoom">
+    <button id="createRoomButton" class="menuButton" onclick="createRoom('yellow')">Создать комнату</button>
+  </div>
+  <div id="connectRoom" class="connectRoom">
+    <button id="connectRoomButton" class="menuButton" onclick="getCode()"><span class="bold">Присоединиться к комнате</span><br><span class="small">По пригласительному коду</span></button>
+  </div>
+  <title>CodePrompt</title>
+  <script>
+    function getCode() {
+      var userInput = prompt('Введите пригласительный код:');
+      if (userInput !== null) {
+        connectRoom(userInput);
+      }
+    }
+  </script>
+</div>
+
+<div id="game" class="game">
   <div class="rectangle left">
-    <div class="piece_image center"></div>
-    <div class="piece_name center"></div>
-    <div class="piece_info center"></div>
+    <div id="piece_image" class="piece_image center"></div>
+    <div id="piece_name" class="piece_name center"></div>
+    <div id="piece_info" class="piece_info center"></div>
   </div>
   <div class="square">
     <div id="board"></div>
-    <script>
-      boardScript()
-    </script>
   </div>
   <div class="rectangle right">
     <div id="history_panel" class="scrollable-panel center"></div>
@@ -222,8 +272,15 @@
     <button id="h" class="button buttonHypno" onclick="pickFigure(this)"></button>
     <button id="m" class="button buttonAdmiral" onclick="pickFigure(this)"></button>
   </div>
-  <div class="invite_code center"></div>
+  <div id="invite_code" class="invite_code center"></div>
 </div>
 
 </body>
+
+<script src="./piece.js"></script>
+<script src="./move_generator.js"></script>
+<script src="./draft.js"></script>
+<script src="./chess.js"></script>
+<script src="./game.js"></script>
+
 </html>

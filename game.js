@@ -51,6 +51,8 @@ socket.on('finishDraft', function (msg) {
     var draftContainer = document.getElementById("draft")
     draftContainer.remove()
 
+    var gameContainer = document.getElementById("game")
+    gameContainer.style.display = "flex";
     var cfg = {
         orientation: color,
         draggable: true,
@@ -65,21 +67,6 @@ socket.on('finishDraft', function (msg) {
     board = ChessBoard('board', cfg, msg.startPosition);
     game = new Chess(msg.startPosition)
 });
-
-var boardScript = function () {
-    var cfg = {
-        orientation: color,
-        draggable: true,
-        position: 'start',
-        onDragStart: onDragStart,
-        onDrop: onDrop,
-        onMouseoutSquare: onMouseoutSquare,
-        onMouseoverSquare: onMouseoverSquare,
-        onSnapEnd: onSnapEnd
-    };
-
-    board = ChessBoard('board', cfg);
-}
 
 socket.on('move', function (msg) {
     if (msg.room == roomId) {
@@ -158,12 +145,23 @@ var onMouseoverSquare = function (square, piece) {
 
     // highlight the square they moused over
     greySquare(square);
+    showLastPieceInfo(square)
 
     // highlight the possible squares for this piece
     for (var i = 0; i < moves.length; i++) {
         greySquare(moves[i].to);
     }
 };
+
+var showLastPieceInfo = function (square) {
+    var pieceImage = document.getElementById('piece_image')
+    var pieceName = document.getElementById('piece_name')
+    var pieceInfo = document.getElementById('piece_info')
+
+    pieceImage.style.backgroundImage = "url('img/pieces/T_Admiral.png')";
+    pieceName.innerText = "Test"
+    pieceInfo.innerText = "Test"
+}
 
 var onMouseoutSquare = function (square, piece) {
     removeGreySquares();
@@ -174,7 +172,7 @@ var onSnapEnd = function () {
 };
 
 socket.on('player', (msg) => {
-    var plno = document.getElementById('info')
+    var inviteCode = document.getElementById('invite_code')
     var draftButtons = document.getElementById('draft')
     draftButtons.style.display = "grid";
 
@@ -186,7 +184,7 @@ socket.on('player', (msg) => {
         figureColor = "blue"
     }
 
-    plno.innerHTML = 'Player ' + msg.players + " : " + color + " InviteCode: " + msg.roomCode;
+    inviteCode.innerHTML = " InviteCode: " + msg.roomCode;
     players = msg.players;
     roomId = msg.roomId
     if(players == 2){
