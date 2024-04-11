@@ -40,6 +40,8 @@ class Piece {
                 return this.get_assassin_moves(from, board, turn)
             case this.PRINCE:
                 return this.get_prince_moves(from, board, turn)
+            case this.CAESAR:
+                return this.get_caesar_moves(from, board, turn)
             default:
                 return this.get_default_moves(from, board, turn)
         }
@@ -98,7 +100,7 @@ class Piece {
     }
 
     get_caesar_moves(from, board, turn) {
-        return []
+        return this.get_moves_by_rays(from, board, turn, [4, 4, 4, 4, 0, 4, 4, 4, 4], false)
     }
 
     get_prince_moves(from, board, turn) {
@@ -106,7 +108,7 @@ class Piece {
     }
 
     get_hypno_moves(from, board, turn) {
-        return []
+        return this.get_moves_by_rays(from, board, turn, [2, 2, 2, 2, 0, 2, 2, 2, 2], false)
     }
 
     get_default_moves(from, board, turn) {
