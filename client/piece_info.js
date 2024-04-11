@@ -17,7 +17,7 @@ class PieceInfo {
         "c": {pieceImage: "url('img/pieces/T_Cannon.png')", pieceName: "Пушка", pieceDescription: "Вперед двигается как ладья, назад как слон. Не проходит сквозь фигуры."},
         "i": {pieceImage: "url('img/pieces/T_Prince.png')", pieceName: "Принц", pieceDescription: "Двигается на 2 клетки в любом направлении. Если жив, то игра не завершается при съедении короля. Не проходит сквозь фигуры."},
         "e": {pieceImage: "url('img/pieces/T_Caesar.png')", pieceName: "Цезарь", pieceDescription: "Двигается на 4 клетки в любом направлении. Пока жив, пешки всегда могут ходить на две клетки. Не проходит сквозь фигуры."},
-        "h": {pieceImage: "url('img/pieces/T_Hypno.png')", pieceName: "Гипно", pieceDescription: "Двигается как ферзь, но на 2 клетки. Вместо хода может поменяться клетками с союзной пешкой, но только если не стоит на переводной диагонали. Проходимость - обычная."}
+        "h": {pieceImage: "url('img/pieces/T_Hypnosis.png')", pieceName: "Гипно", pieceDescription: "Двигается как ферзь, но на 2 клетки. Вместо хода может поменяться клетками с союзной пешкой, но только если не стоит на переводной диагонали. Проходимость - обычная."}
     };
 
     get_piece_info(type) {

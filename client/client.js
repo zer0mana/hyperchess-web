@@ -88,6 +88,29 @@ socket.on('play', function (msg) {
 });
 
 // Драфт
+var draftButtons = document.querySelectorAll('.button');
+draftButtons.forEach(function(object) {
+    object.addEventListener('mouseover', function(event) {
+        // Получаем id объекта, на который навели курсор
+        var objectId = event.target.id;
+
+        var pieceImage = document.getElementById('draft_info_image')
+        var pieceDescription = document.getElementById('draft_info_description')
+
+        var info = pieceInfos.get_piece_info(objectId)
+
+        pieceImage.style.backgroundSize = "cover";
+        pieceImage.style.backgroundImage = info.pieceImage;
+
+        pieceDescription.innerHTML = '<strong>' + info.pieceName + '</strong><br><span style="font-size: smaller;">' + info.pieceDescription + '</span>';
+        pieceDescription.style.color = "Black";
+        pieceDescription.style.textAlign = "Center"
+        pieceDescription.style.justifyContent = "Center"
+        pieceDescription.style.fontSize = "20px";
+        pieceDescription.style.fontWeight = "Bold";
+    });
+});
+
 socket.on('finishDraft', function (msg) {
     var draftContainer = document.getElementById("draft")
     draftContainer.style.display = "none"
