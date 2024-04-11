@@ -206,7 +206,6 @@
     #history_panel {
       width: 270px;
       height: 500px;
-      border: 1px dashed red; /* Пунктирная красная обводка толщиной 1 пиксель */
     }
   </style>
 </head>
@@ -274,6 +273,36 @@
   </div>
   <div id="invite_code" class="invite_code center"></div>
 </div>
+
+<script>
+  // Получаем элемент панели
+  var panel = document.getElementById('history_panel');
+  var i = 0;
+  var j = 0;
+
+  // Функция для добавления текста в панель
+  function addToPanel(text) {
+    if (i++ % 2 === 0) {
+      var rectangle = document.createElement('div');
+      rectangle.textContent = text;
+      rectangle.style.color = "white";
+      rectangle.style.fontSize = "20px";
+      rectangle.style.borderRadius = "20px";
+      if (j++ % 2 === 0) {
+        rectangle.style.backgroundColor = "red";
+      }
+      else {
+        rectangle.style.backgroundColor = "blue";
+      }
+      panel.appendChild(rectangle);
+      panel.scrollTop = panel.scrollHeight;
+      // rectangle.style.backgroundColor = "grey";
+    }
+    else {
+      panel.lastChild.textContent = panel.lastChild.textContent + "        " + text
+    }
+  }
+</script>
 
 </body>
 
