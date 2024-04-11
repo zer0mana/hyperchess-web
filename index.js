@@ -76,6 +76,15 @@ io.on('connection', function (socket) {
         console.log(msg);
     });
 
+    socket.on('offerDraw', function () {
+        socket.broadcast.emit('offerDraw');
+    });
+
+    socket.on('acceptDraw', function () {
+        // save to db
+        socket.broadcast.emit('acceptDraw');
+    });
+
     socket.on('play', function (msg) {
         socket.broadcast.emit('play', msg);
         console.log("ready " + msg);

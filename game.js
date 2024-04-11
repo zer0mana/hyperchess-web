@@ -34,9 +34,24 @@ var createRoom = function () {
 }
 
 var tryDraw = function () {
-    menu.style.display = "none"
-    socket.emit('createRoom')
+    var result = confirm("Вы точно хотите предложить ничью?")
+    if (result) {
+        socket.emit('offerDraw')
+    }
 }
+
+socket.on('offerDraw', function () {
+    var result = confirm("Вы согласны на ничью?")
+    if (result) {
+        socket.emit('acceptDraw')
+        backToMenu()
+    }
+});
+
+socket.on('acceptDraw', function () {
+    alert("Противник согласился на ничью")
+    backToMenu()
+});
 
 var trySurrender = function () {
     var result = confirm("Вы точно хотите сдаться?")
@@ -45,6 +60,11 @@ var trySurrender = function () {
         backToMenu()
     }
 }
+
+socket.on('opponentSurrender', function () {
+    alert("Противник сдался")
+    backToMenu()
+});
 
 var backToMenu = function () {
     var draftContainer = document.getElementById("draft")
@@ -64,11 +84,6 @@ socket.on('play', function (msg) {
         play = false;
     }
     // console.log(msg)
-});
-
-socket.on('opponentSurrender', function () {
-    alert("Противник сдался")
-    backToMenu()
 });
 
 // Драфт
