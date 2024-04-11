@@ -642,6 +642,11 @@ var Chess = function(fen) {
             return moves;
         },
 
+        get_piece_type_by_square: function (square) {
+            var from = SQUARES[square]
+            return board[from];
+        },
+
         game_over: function() {
             return half_moves >= 100 ||
                 in_checkmate() ||

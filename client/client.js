@@ -1,5 +1,6 @@
 game = new Chess();
 draft = new Draft();
+pieceInfos = new PieceInfo();
 
 var socket = io();
 
@@ -198,9 +199,17 @@ var showLastPieceInfo = function (square) {
     var pieceName = document.getElementById('piece_name')
     var pieceInfo = document.getElementById('piece_info')
 
-    pieceImage.style.backgroundImage = "url('img/pieces/T_Admiral.png')";
-    pieceName.innerText = "Test"
-    pieceInfo.innerText = "Test"
+    var piece = game.get_piece_type_by_square(square)
+
+    if (piece === null || piece === undefined) {
+        return;
+    }
+
+    var info = pieceInfos.get_piece_info(piece.type)
+
+    pieceImage.style.backgroundImage = info.pieceImage;
+    pieceName.innerText = info.pieceName
+    pieceInfo.innerText = info.pieceDescription
 }
 
 var onMouseoutSquare = function (square, piece) {
