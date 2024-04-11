@@ -208,8 +208,20 @@ var showLastPieceInfo = function (square) {
     var info = pieceInfos.get_piece_info(piece.type)
 
     pieceImage.style.backgroundImage = info.pieceImage;
+
     pieceName.innerText = info.pieceName
+    pieceName.style.color = "Black";
+    pieceName.style.textAlign = "Center"
+    pieceName.style.justifyContent = "Center"
+    pieceName.style.fontSize = "30px";
+    pieceName.style.fontWeight = "Bold";
+    // pieceName.style.fontFamily = "Montserrat Alternates";
+
     pieceInfo.innerText = info.pieceDescription
+    pieceInfo.style.color = "Black";
+    pieceInfo.style.textAlign = "Center"
+    pieceInfo.style.fontSize = "20px";
+    pieceInfo.style.justifyContent = "Center"
 }
 
 var onMouseoutSquare = function (square, piece) {
