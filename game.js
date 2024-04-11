@@ -29,8 +29,29 @@ var pickFigure = function (button) {
 
 // Подключение к комнате
 var createRoom = function () {
-    menu.remove();
+    menu.style.display = "none"
     socket.emit('createRoom')
+}
+
+var tryDraw = function () {
+    menu.style.display = "none"
+    socket.emit('createRoom')
+}
+
+var trySurrender = function () {
+    var result = confirm("Вы точно хотите сдаться?")
+    if (result) {
+        socket.emit('opponentSurrender')
+        backToMenu()
+    }
+}
+
+var backToMenu = function () {
+    var draftContainer = document.getElementById("draft")
+    draftContainer.style.display = "none"
+    var gameContainer = document.getElementById("game")
+    gameContainer.style.display = "none";
+    menu.style.display = ""
 }
 
 socket.on('full', function (msg) {
@@ -45,11 +66,15 @@ socket.on('play', function (msg) {
     // console.log(msg)
 });
 
+socket.on('opponentSurrender', function () {
+    alert("Противник сдался")
+    backToMenu()
+});
 
 // Драфт
 socket.on('finishDraft', function (msg) {
     var draftContainer = document.getElementById("draft")
-    draftContainer.remove()
+    draftContainer.style.display = "none"
 
     var gameContainer = document.getElementById("game")
     gameContainer.style.display = "flex";

@@ -89,6 +89,11 @@ io.on('connection', function (socket) {
         console.log(playerId + ' disconnected');
     });
 
+    socket.on('opponentSurrender', function () {
+        // save to db
+        socket.broadcast.emit('opponentSurrender');
+    });
+
     socket.on('changeColor', data => {
         console.log(data)
         // Передача сообщения о изменении цвета всем остальным клиентам
