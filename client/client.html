@@ -204,8 +204,12 @@
       margin-right: 20px; /* Расстояние между board и otherObject */
     }
     #history_panel {
+      display: grid;
+      grid-template-columns: repeat(2, 1fr); /* Разбиваем контейнер на два столбца */
+      gap: 10px; /* Добавляем промежуток между объектами */
       width: 270px;
       height: 500px;
+      grid-auto-rows: minmax(auto, 43px);
     }
   </style>
 </head>
@@ -282,25 +286,22 @@
 
   // Функция для добавления текста в панель
   function addToPanel(text) {
-    if (i++ % 2 === 0) {
-      var rectangle = document.createElement('div');
-      rectangle.textContent = text;
-      rectangle.style.color = "white";
-      rectangle.style.fontSize = "20px";
-      rectangle.style.borderRadius = "20px";
-      if (j++ % 2 === 0) {
-        rectangle.style.backgroundColor = "red";
-      }
-      else {
-        rectangle.style.backgroundColor = "blue";
-      }
-      panel.appendChild(rectangle);
-      panel.scrollTop = panel.scrollHeight;
-      // rectangle.style.backgroundColor = "grey";
+    var rectangle = document.createElement('div');
+    rectangle.style.height = "40px";
+    rectangle.textContent = text;
+    rectangle.style.color = "white";
+    rectangle.style.fontSize = "20px";
+    rectangle.style.borderRadius = "20px";
+    rectangle.style.textAlign = "Center"
+    rectangle.style.justifyContent = "Center"
+    rectangle.style.fontWeight = "Bold";
+    if (j++ % 2 === 0) {
+      rectangle.style.backgroundColor = "blue";
+    } else {
+      rectangle.style.backgroundColor = "red";
     }
-    else {
-      panel.lastChild.textContent = panel.lastChild.textContent + "        " + text
-    }
+    panel.appendChild(rectangle);
+    panel.scrollTop = panel.scrollHeight;
   }
 </script>
 
