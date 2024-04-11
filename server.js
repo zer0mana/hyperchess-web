@@ -10,7 +10,7 @@ const io = socket(server)
 var players;
 var joined = true;
 
-app.use(express.static(__dirname + "/"));
+app.use(express.static(__dirname + "/client"));
 
 var games = Array(100);
 for (let i = 0; i < 100; i++) {
@@ -18,7 +18,7 @@ for (let i = 0; i < 100; i++) {
 }
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/client.html');
+    res.sendFile(__dirname + '/client/client.html');
 });
 
 io.on('connection', function (socket) {
