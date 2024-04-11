@@ -11,5 +11,5 @@ ide: webstrom
 browser: chrome
 ```
 npm install
-node index.js
+node server.js
 ```

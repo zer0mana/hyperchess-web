@@ -18,7 +18,7 @@ for (let i = 0; i < 100; i++) {
 }
 
 app.get('/', (req, res) => {
-    res.sendFile(__dirname + '/index.html');
+    res.sendFile(__dirname + '/client.html');
 });
 
 io.on('connection', function (socket) {
