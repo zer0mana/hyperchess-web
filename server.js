@@ -9,6 +9,7 @@ const server = http.createServer(app)
 const io = socket(server)
 var players;
 var joined = true;
+const repository = require('./repository');
 
 app.use(express.static(__dirname + "/client"));
 
