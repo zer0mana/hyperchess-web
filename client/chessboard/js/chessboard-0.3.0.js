@@ -35,11 +35,12 @@ function validSquare(square) {
 
 function validPieceCode(code) {
   if (typeof code !== 'string') return false;
-  return (code.search(/^[bw][KQRNBPAFSGJDMLCEI]$/) !== -1);
+  return (code.search(/^[bw][KQRNBPAFSGJDMLCEIH]$/) !== -1);
 }
 
 // TODO: this whole function could probably be replaced with a single regex
 function validFen(fen) {
+  console.log("and here")
   if (typeof fen !== 'string') return false;
 
   // cut off any move, castling, etc info from the end
@@ -54,7 +55,7 @@ function validFen(fen) {
   for (var i = 0; i < 8; i++) {
     if (chunks[i] === '' ||
         chunks[i].length > 8 ||
-        chunks[i].search(/[^kqrbnpafsgjdmlceiKQRNBPAFSGJDMLCEI1-8]/) !== -1) {
+        chunks[i].search(/[^kqrbnpafsgjdmlceihKQRNBPAFSGJDMLCEIH1-8]/) !== -1) {
       return false;
     }
   }
@@ -69,10 +70,12 @@ function validPositionObject(pos) {
     if (pos.hasOwnProperty(i) !== true) continue;
 
     if (validSquare(i) !== true || validPieceCode(pos[i]) !== true) {
+      console.log(pos[i])
       return false;
     }
   }
 
+  console.log("okay")
   return true;
 }
 

@@ -26,7 +26,7 @@ var Chess = function(fen) {
     var CAESAR = 'e'
     var HYPNO = 'h'
 
-    var SYMBOLS = 'pnbrqkafsgjdmlceiPNBRQKAFSGJDMLCEI';
+    var SYMBOLS = 'pnbrqkafsgjdmlceihPNBRQKAFSGJDMLCEIH';
 
     var DEFAULT_POSITION = 'raejkbsr/pppppppp/8/8/8/8/PPPPPPPP/RNBQKBNR w KQkq - 0 1';
 

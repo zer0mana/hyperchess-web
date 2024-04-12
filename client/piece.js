@@ -42,6 +42,8 @@ class Piece {
                 return this.get_prince_moves(from, board, turn)
             case this.CAESAR:
                 return this.get_caesar_moves(from, board, turn)
+            case this.KING:
+                return this.get_king_moves(from, board, turn)
             default:
                 return this.get_default_moves(from, board, turn)
         }
@@ -108,7 +110,12 @@ class Piece {
     }
 
     get_hypno_moves(from, board, turn) {
-        return this.get_moves_by_rays(from, board, turn, [2, 2, 2, 2, 0, 2, 2, 2, 2], false)
+        var moves= this.get_moves_by_rays(from, board, turn, [2, 2, 2, 2, 0, 2, 2, 2, 2], false)
+        return moves;
+    }
+
+    get_king_moves(from, board, turn) {
+        return this.get_moves_by_rays(from, board, turn, [1, 1, 1, 1, 0, 1, 1, 1, 1], false)
     }
 
     get_default_moves(from, board, turn) {

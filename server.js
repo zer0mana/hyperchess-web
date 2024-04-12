@@ -116,19 +116,8 @@ io.on('connection', function (socket) {
             games[data.roomId].blackFigures.push(data.buttonId.toLowerCase())
         }
 
-        if (games[data.roomId].figuresCount === 4) {
-            games[data.roomId].whiteFigures.push('A')
-            games[data.roomId].whiteFigures.push('A')
-            games[data.roomId].whiteFigures.push('A')
-            games[data.roomId].whiteFigures.push('A')
-            games[data.roomId].whiteFigures.push('A')
+        if (games[data.roomId].figuresCount === 14) {
             games[data.roomId].whiteFigures.push('K')
-
-            games[data.roomId].blackFigures.push('a')
-            games[data.roomId].blackFigures.push('a')
-            games[data.roomId].blackFigures.push('a')
-            games[data.roomId].blackFigures.push('a')
-            games[data.roomId].blackFigures.push('a')
             games[data.roomId].blackFigures.push('k')
 
             console.log(getStartPosition(data.roomId))
@@ -140,7 +129,7 @@ io.on('connection', function (socket) {
 
 var lastGameId = 0
 
-// Генерирует
+// Генерирует пригласительный код
 var generateInviteCode = function(length) {
     const characters = 'ABCDEFGHIJKLMNOPQRSTUVWXYZ0123456789'; // Допустимые символы для кода
     let result = '';
