@@ -44,6 +44,8 @@ class Piece {
                 return this.get_caesar_moves(from, board, turn)
             case this.KING:
                 return this.get_king_moves(from, board, turn)
+            case this.PAWN:
+                return this.get_pawn_moves(from, board, turn)
             default:
                 return this.get_default_moves(from, board, turn)
         }
@@ -116,6 +118,22 @@ class Piece {
 
     get_king_moves(from, board, turn) {
         return this.get_moves_by_rays(from, board, turn, [1, 1, 1, 1, 0, 1, 1, 1, 1], false)
+    }
+
+    get_pawn_moves(from, board, turn) {
+        var distance = 1;
+
+        if ((from > 15 && from < 24) || (from > 95 && from < 104)) {
+            distance *= 2;
+        }
+
+        console.log(board[from].color)
+        if (board[from].color === "b") {
+            return this.get_moves_by_rays(from, board, turn, [0, 0, 0, 0, 0, distance, 0, 0, 0], false)
+        }
+        else {
+            return this.get_moves_by_rays(from, board, turn, [0, 0, 0, distance, 0, 0, 0, 0, 0], false)
+        }
     }
 
     get_default_moves(from, board, turn) {
