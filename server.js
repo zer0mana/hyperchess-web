@@ -9,7 +9,6 @@ const server = http.createServer(app)
 const io = socket(server)
 var players;
 var joined = true;
-const repository = require('./repository');
 
 app.use(express.static(__dirname + "/client"));
 
@@ -62,7 +61,6 @@ io.on('connection', function (socket) {
         
         console.log(games[gameIndex]);
         players = games[gameIndex].players
-        
 
         if (players % 2 == 0) color = 'black';
         else color = 'white';

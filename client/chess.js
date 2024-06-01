@@ -451,6 +451,7 @@ var Chess = function(fen) {
         board[move.from] = null;
 
         turn = swap_color(turn);
+        undo_move()
     }
 
     // Вернуть предыдущий ход

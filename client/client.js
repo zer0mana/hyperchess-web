@@ -128,7 +128,7 @@ socket.on('finishDraft', function (msg) {
         onSnapEnd: onSnapEnd
     };
 
-    console.log("here")
+    console.log(msg.startPosition)
     board = ChessBoard('board', cfg, msg.startPosition);
     game = new Chess(msg.startPosition)
 });
