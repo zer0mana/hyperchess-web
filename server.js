@@ -22,6 +22,7 @@ app.get('/', (req, res) => {
 });
 
 io.on('connection', function (socket) {
+    usersCount++;
     // console.log(players);
     var color;
     var playerId =  Math.floor((Math.random() * 100) + 1)
@@ -94,6 +95,7 @@ io.on('connection', function (socket) {
             if (games[i].pid[0] == playerId || games[i].pid[1] == playerId)
                 games[i].players--;
         }
+        usersCount--;
         console.log(playerId + ' disconnected');
     });
 
@@ -125,6 +127,23 @@ io.on('connection', function (socket) {
         }
     });
 });
+
+
+let usersCount = 0;
+setInterval(() => {
+    sendUserUpData(usersCount);
+}, 1000);
+
+function sendUserUpData(count) {
+    fetch('http://localhost:8086/write?db=mydb', {
+        method: 'POST',
+        headers: {
+            'Authorization': 'Basic ' + btoa('admin:admin_password'),
+            'Content-Type': 'text/plain',
+        },
+        body: `users count=${count} ${Date.now() * 1000000}`, // Временная метка в наносекундах
+    });
+}
 
 var lastGameId = 0
 
