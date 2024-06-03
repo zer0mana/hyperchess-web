@@ -1,6 +1,8 @@
 const express = require('express');
 const http = require('http');
 const socket = require('socket.io');
+const moves_cache = require('./moves_cache');
+const movesCache = new moves_cache();
 
 const port = process.env.PORT || 8080
 
@@ -12,8 +14,8 @@ var joined = true;
 
 app.use(express.static(__dirname + "/client"));
 
-var games = Array(100000000);
-for (let i = 0; i < 100000000; i++) {
+var games = Array(1000);
+for (let i = 0; i < 1000; i++) {
     games[i] = {players: 0 , pid: [0 , 0], code: "", figuresCount: 0, whiteFigures: [], blackFigures: []};
 }
 
@@ -39,7 +41,7 @@ io.on('connection', function (socket) {
         games[index].pid[games[index].players - 1] = playerId;
         var players = 1
 
-        socket.emit('player', { playerId, players, color, lastGameId, roomCode: code })
+        socket.emit('player', { playerId, players, color, roomId: index, roomCode: code })
         lastGameId++;
     });
 
@@ -67,11 +69,12 @@ io.on('connection', function (socket) {
         else color = 'white';
 
         console.log(roomCode)
-        socket.emit('player', { playerId, players, color, gameIndex, roomCode: roomCode })
+        socket.emit('player', { playerId, players, color, roomId: gameIndex, roomCode: roomCode })
         // players--;
     });
 
     socket.on('move', function (msg) {
+        movesCache.writeString(msg.room, msg.move)
         socket.broadcast.emit('move', msg);
         console.log(msg);
     });
@@ -93,6 +96,7 @@ io.on('connection', function (socket) {
     socket.on('disconnect', function () {
         for (let i = 0; i < 100; i++) {
             if (games[i].pid[0] == playerId || games[i].pid[1] == playerId)
+                movesCache.deleteKeysById(i)
                 games[i].players--;
         }
         console.log(playerId + ' disconnected');
