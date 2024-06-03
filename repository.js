@@ -3,11 +3,14 @@ const { Pool } = require('pg');
 class Repository {
     constructor() {
         this.pool = new Pool({
-            user: 'hyperchess_server',
+            user: 'username',
             host: 'localhost',
-            database: 'hyperchess',
-            password: '12345',
+            database: 'dbname',
+            password: 'password',
             port: 5432,
+            max: 20,
+            idleTimeoutMillis: 30000,
+            connectionTimeoutMillis: 2000
         });
     }
 
