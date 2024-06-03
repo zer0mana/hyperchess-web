@@ -33,9 +33,10 @@ io.on('connection', function (socket) {
         var code = generateInviteCode(5);
         console.log(code)
 
-        games[lastGameId].players = 1;
-        games[lastGameId].code = code
-        games[lastGameId].pid[games[lastGameId].players - 1] = playerId;
+        var index = findFirstGameWithZeroPlayers(games)
+        games[index].players = 1;
+        games[index].code = code
+        games[index].pid[games[index].players - 1] = playerId;
         var players = 1
 
         socket.emit('player', { playerId, players, color, lastGameId, roomCode: code })
@@ -140,6 +141,18 @@ var generateInviteCode = function(length) {
     return result;
 }
 
+function findFirstGameWithZeroPlayers(games) {
+    for (let i = 0; i < games.length; i++) {
+        if (games[i].players === 0) {
+            console.log(i)
+            return i;
+        }
+    }
+
+    console.log(-1)
+    return -1;
+}
+
 // Генерирует стартовую позицию по набору фигур
 var getStartPosition = function(roomId) {
     var position = ""
@@ -157,7 +170,6 @@ var getStartPosition = function(roomId) {
     }
     return position + " w KQkq - 0 1"
 }
-
 
 server.listen(port);
 console.log('Connected');
