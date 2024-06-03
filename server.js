@@ -95,7 +95,6 @@ io.on('connection', function (socket) {
             if (games[i].pid[0] == playerId || games[i].pid[1] == playerId)
                 games[i].players--;
         }
-        usersCount--;
         console.log(playerId + ' disconnected');
     });
 
@@ -132,6 +131,7 @@ io.on('connection', function (socket) {
 let usersCount = 0;
 setInterval(() => {
     sendUserUpData(usersCount);
+    usersCount = 0;
 }, 1000);
 
 function sendUserUpData(count) {
@@ -143,6 +143,7 @@ function sendUserUpData(count) {
         },
         body: `users count=${count} ${Date.now() * 1000000}`, // Временная метка в наносекундах
     });
+    console.log("new users per second:" + count)
 }
 
 var lastGameId = 0
@@ -176,7 +177,6 @@ var getStartPosition = function(roomId) {
     }
     return position + " w KQkq - 0 1"
 }
-
 
 server.listen(port);
 console.log('Connected');

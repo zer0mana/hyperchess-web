@@ -1,6 +1,16 @@
 version: '3.1'
 
 services:
+  db:
+    image: postgres
+    container_name: postgres_db
+    environment:
+      POSTGRES_USER: service
+      POSTGRES_PASSWORD: service_password
+      POSTGRES_DB: hyperchess
+    ports:
+      - "5432:5432"
+
   grafana:
     image: grafana/grafana:latest
     container_name: grafana
