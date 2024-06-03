@@ -12,8 +12,8 @@ var joined = true;
 
 app.use(express.static(__dirname + "/client"));
 
-var games = Array(100);
-for (let i = 0; i < 100; i++) {
+var games = Array(100000000);
+for (let i = 0; i < 100000000; i++) {
     games[i] = {players: 0 , pid: [0 , 0], code: "", figuresCount: 0, whiteFigures: [], blackFigures: []};
 }
 
