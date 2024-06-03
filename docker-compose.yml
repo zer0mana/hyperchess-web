@@ -20,6 +20,8 @@ services:
       - GF_SECURITY_ADMIN_PASSWORD=admin
     volumes:
       - grafana-storage:/var/lib/grafana
+      - ./config:/etc/grafana/config
+    command: ["--config", "/etc/grafana/config/dashboard_config.json"]
 
   influxdb:
     image: influxdb:latest

@@ -1,0 +1,98 @@
+{
+  "dashboard": {
+    "id": null,
+    "uid": "users_dashboard",
+    "title": "Unique Users per Second Dashboard",
+    "timezone": "browser",
+    "schemaVersion": 22,
+    "version": 1,
+    "refresh": "5s",
+    "panels": [
+      {
+        "datasource": "influxdb",
+        "gridPos": {
+          "h": 6,
+          "w": 12,
+          "x": 0,
+          "y": 0
+        },
+        "id": 1,
+        "targets": [
+          {
+            "measurement": "users",
+            "groupBy": [
+              {
+                "params": [
+                  "1s"
+                ],
+                "type": "time"
+              }
+            ],
+            "select": [
+              [
+                {
+                  "params": [
+                    "count(distinct(\"user_id\"))"
+                  ],
+                  "type": "field"
+                }
+              ]
+            ],
+            "alias": "Unique Users per Second",
+            "aliasBy": "name"
+          }
+        ],
+        "title": "Unique Users per Second",
+        "type": "graph",
+        "timeFrom": "now-1h",
+        "timeShift": null,
+        "tooltip": {
+          "shared": true,
+          "sort": 0,
+          "value_type": "individual"
+        },
+        "yaxes": [
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          },
+          {
+            "format": "short",
+            "label": null,
+            "logBase": 1,
+            "max": null,
+            "min": null,
+            "show": true
+          }
+        ],
+        "xaxis": {
+          "buckets": null,
+          "mode": "time",
+          "name": null,
+          "show": true,
+          "values": []
+        }
+      }
+    ],
+    "time": {
+      "from": "now-1h",
+      "to": "now"
+    }
+  },
+  "inputs": [
+    {
+      "name": "influxdb",
+      "type": "datasource",
+      "pluginId": "influxdb",
+      "value": "influxdb",
+      "secureJsonFields": {},
+      "secureJsonData": {
+        "password": "admin_password"
+      }
+    }
+  ]
+}
